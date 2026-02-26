@@ -6,7 +6,8 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from "@tailwindcss/vite";
 import path from 'path';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+    base: command === 'build' ? '/.theme/' : '/',
     plugins: [
         tsconfigPaths(),
         preact({
@@ -46,4 +47,4 @@ export default defineConfig({
             ]
         }
     }
-});
+}));
