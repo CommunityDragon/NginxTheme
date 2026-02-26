@@ -86,7 +86,7 @@ export const NavBar: React.FC = () => {
                                         <ListItem href="https://universe.communitydragon.org/events" title="Universe">
                                             A tool to find, view, and decrypt Riot's .bin files
                                         </ListItem>
-                                        <ListItem href="https://raw.communitydragon.org/binviewer" title=".BIN Viewer">
+                                        <ListItem href="https://raw.communitydragon.org/binviewer/" title=".BIN Viewer">
                                             A tool to find, view, and decrypt Riot's .bin files
                                         </ListItem>
                                         <ListItem href="https://pypi.org/project/cdtb" title="CDTB">
