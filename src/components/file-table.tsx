@@ -1,0 +1,112 @@
+import { useState, useMemo } from 'react';
+import type { FileEntry, SortColumn, SortDirection } from '@typings/files';
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
+import { getFileIcon, sortFiles } from '@lib/utils';
+
+interface Props {
+  files: FileEntry[];
+}
+
+export const FileTable: React.FC<Props> = ({ files }) => {
+  const [sortColumn, setSortColumn] = useState<SortColumn>('name');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+
+  const sortedFiles = useMemo(
+    () => sortFiles(files, sortColumn, sortDirection),
+    [files, sortColumn, sortDirection]
+  );
+
+  const toggleSort = (column: SortColumn) => {
+    if (sortColumn === column) {
+      setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  const formatDate = (date: Date|null) => {
+    if (!date) return '-';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const SortIcon = ({ column }: { column: SortColumn }) => {
+    if (sortColumn !== column) return <ArrowUpDown className="ml-2 h-4 w-4" />;
+    return sortDirection === 'asc' 
+      ? <ArrowUp className="ml-2 h-4 w-4" />
+      : <ArrowDown className="ml-2 h-4 w-4" />;
+  };
+
+  return (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-full">
+              <Button variant="ghost" size='sm' onClick={() => toggleSort('name')}>
+                Name
+                <SortIcon column="name" />
+              </Button>
+            </TableHead>
+            
+            <TableHead className="text-right whitespace-nowrap w-min">
+              <Button variant="ghost" size='sm' onClick={() => toggleSort('size')}>
+                Size
+                <SortIcon column="size" />
+              </Button>
+            </TableHead>
+            
+            <TableHead className="text-right whitespace-nowrap w-min">
+              <Button variant="ghost" size='sm' onClick={() => toggleSort('date')}>
+                Modified
+                <SortIcon column="date" />
+              </Button>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {sortedFiles.map((file) => {
+            const Icon = getFileIcon(file.name, file.isDirectory);
+            return (
+              <TableRow key={file.link}>
+                <TableCell className="font-medium">
+                  <a href={file.link} className="flex items-center gap-2">
+                    <Icon className="h-4 w-4" />
+                    {file.name.replace(/\/+$/, '')}
+                  </a>
+                </TableCell>
+
+                <TableCell className="text-right">
+                  {!file.isDirectory && file.size ? (
+                    <Badge variant="secondary" className="inline-flex">
+                      {file.size.raw}
+                    </Badge>
+                  ) : (
+                    '-'
+                  )}
+                </TableCell>
+
+                <TableCell className="text-right whitespace-nowrap font-mono pr-5 text-xs">
+                  {formatDate(file.date)}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
