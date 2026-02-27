@@ -18,8 +18,9 @@ interface Props {
 }
 
 export const FileTable: React.FC<Props> = ({ files }) => {
-  const [sortColumn, setSortColumn] = useState<SortColumn>('name');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  // Start with no sorting
+  const [sortColumn, setSortColumn] = useState<SortColumn | null>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc'); // only used when sortColumn is not null
 
   const sortedFiles = useMemo(
     () => sortFiles(files, sortColumn, sortDirection),
@@ -28,14 +29,21 @@ export const FileTable: React.FC<Props> = ({ files }) => {
 
   const toggleSort = (column: SortColumn) => {
     if (sortColumn === column) {
-      setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+      // Same column: cycle asc → desc → unsorted
+      if (sortDirection === 'asc') {
+        setSortDirection('desc');
+      } else if (sortDirection === 'desc') {
+        setSortColumn(null); // go to unsorted
+        // direction can stay as 'desc' or be reset; it's ignored when column is null
+      }
     } else {
+      // Different column: set to asc
       setSortColumn(column);
       setSortDirection('asc');
     }
   };
 
-  const formatDate = (date: Date|null) => {
+  const formatDate = (date: Date | null) => {
     if (!date) return '-';
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -44,33 +52,37 @@ export const FileTable: React.FC<Props> = ({ files }) => {
   };
 
   const SortIcon = ({ column }: { column: SortColumn }) => {
-    if (sortColumn !== column) return <ArrowUpDown className="ml-2 h-4 w-4" />;
-    return sortDirection === 'asc' 
-      ? <ArrowUp className="ml-2 h-4 w-4" />
-      : <ArrowDown className="ml-2 h-4 w-4" />;
+    if (sortColumn !== column) {
+      return <ArrowUpDown className="ml-2 h-4 w-4" />;
+    }
+    return sortDirection === 'asc' ? (
+      <ArrowUp className="ml-2 h-4 w-4" />
+    ) : (
+      <ArrowDown className="ml-2 h-4 w-4" />
+    );
   };
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-full">
-              <Button variant="ghost" size='sm' onClick={() => toggleSort('name')}>
+              <Button variant="ghost" size="sm" onClick={() => toggleSort('name')}>
                 Name
                 <SortIcon column="name" />
               </Button>
             </TableHead>
-            
+
             <TableHead className="text-right whitespace-nowrap w-min">
-              <Button variant="ghost" size='sm' onClick={() => toggleSort('size')}>
+              <Button variant="ghost" size="sm" onClick={() => toggleSort('size')}>
                 Size
                 <SortIcon column="size" />
               </Button>
             </TableHead>
-            
+
             <TableHead className="text-right whitespace-nowrap w-min">
-              <Button variant="ghost" size='sm' onClick={() => toggleSort('date')}>
+              <Button variant="ghost" size="sm" onClick={() => toggleSort('date')}>
                 Modified
                 <SortIcon column="date" />
               </Button>

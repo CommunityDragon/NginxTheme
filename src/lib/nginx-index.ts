@@ -65,20 +65,20 @@ export const parseDate = (dateStr: string): Date|null => {
  */
 export const parseTemplate = (): FileIndex => {
   if (typeof document === 'undefined') {
-    return { currentPath: '', files: [] };
+    return { path: '', files: [] };
   }
 
   const template = document.getElementById('table-index') as HTMLTemplateElement;
   if (!template) {
-    return { currentPath: '', files: [] };
+    return { path: '', files: [] };
   }
 
   const h1 = template.content.querySelector('h1');
-  const currentPath = h1?.textContent?.trim() || '';
+  const path = h1?.textContent?.trim() || '';
 
   const tbody = template.content.querySelector('tbody');
   if (!tbody) {
-    return { currentPath, files: [] };
+    return { path, files: [] };
   }
 
   const files: FileEntry[] = Array.from(tbody.querySelectorAll('tr')).map((row) => {
@@ -98,5 +98,5 @@ export const parseTemplate = (): FileIndex => {
     return { name, link, size, date, isDirectory };
   });
 
-  return { currentPath, files };
+  return { path, files };
 }

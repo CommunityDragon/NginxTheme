@@ -2,30 +2,30 @@ import { createContext, useContext, useEffect, useState } from "react"
 
 type Theme = "dark" | "light" | "system"
 
-type ThemeProviderProps = {
+type Props = {
   children: React.ReactNode
   defaultTheme?: Theme
   storageKey?: string
 }
 
-type ThemeProviderState = {
+type State = {
   theme: Theme
   setTheme: (theme: Theme) => void
 }
 
-const initialState: ThemeProviderState = {
+const initialState: State = {
   theme: "system",
   setTheme: () => null,
 }
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+const ThemeProviderContext = createContext<State>(initialState)
 
-export function ThemeProvider({
+export const ThemeProvider: React.FC<Props> = ({
   children,
   defaultTheme = "system",
   storageKey = "ui-theme",
   ...props
-}: ThemeProviderProps) {
+}) => {
   const [theme, setTheme] = useState<Theme>(() => defaultTheme)
 
   useEffect(() => {

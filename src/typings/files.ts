@@ -35,7 +35,7 @@ export interface FileIndex {
   /**
    * Current directory path as shown in the <h1>.
    */
-  currentPath: string;
+  path: string;
 
   /**
    * List of file/directory entries.
