@@ -1,4 +1,4 @@
-import type { FileEntry, FileIndex } from '@typings/files';
+import type { FileEntry, FileIndex } from "@typings/files";
 
 /**
  * Parses a human‑readable size string (e.g. "279.2 KiB", "41.6 KiB", or "-")
@@ -8,14 +8,16 @@ import type { FileEntry, FileIndex } from '@typings/files';
  * @param sizeStr - Size string from the template.
  * @returns Parsed size object or null.
  */
-export const parseSize = (sizeStr: string): { raw: string; bytes: number; unit: string } | null => {
-  if (sizeStr === '-') return null;
+export const parseSize = (
+  sizeStr: string,
+): { raw: string; bytes: number; unit: string } | null => {
+  if (sizeStr === "-") return null;
 
   const match = sizeStr.match(/^([\d.]+)\s*([A-Za-z]+)?$/);
   if (!match) return null;
 
   const value = parseFloat(match[1]);
-  const unit = match[2] || 'B';
+  const unit = match[2] || "B";
 
   const units: Record<string, number> = {
     B: 1,
@@ -33,7 +35,7 @@ export const parseSize = (sizeStr: string): { raw: string; bytes: number; unit: 
     bytes: value * multiplier,
     unit,
   };
-}
+};
 
 /**
  * Parses a date string like "2020-Jan-14 03:03" into a JavaScript Date object.
@@ -42,20 +44,30 @@ export const parseSize = (sizeStr: string): { raw: string; bytes: number; unit: 
  * @param dateStr - Date string from the template.
  * @returns Corresponding Date object.
  */
-export const parseDate = (dateStr: string): Date|null => {
-  if (dateStr.length <= 0 || dateStr === '-') return null;
+export const parseDate = (dateStr: string): Date | null => {
+  if (dateStr.length <= 0 || dateStr === "-") return null;
 
   const months: Record<string, string> = {
-    Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
-    Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12',
+    Jan: "01",
+    Feb: "02",
+    Mar: "03",
+    Apr: "04",
+    May: "05",
+    Jun: "06",
+    Jul: "07",
+    Aug: "08",
+    Sep: "09",
+    Oct: "10",
+    Nov: "11",
+    Dec: "12",
   };
 
-  const [dayMonthYear, time] = dateStr.split(' ');
-  const [year, monthAbbr, day] = dayMonthYear.split('-');
-  const month = months[monthAbbr] || '01';
+  const [dayMonthYear, time] = dateStr.split(" ");
+  const [year, monthAbbr, day] = dayMonthYear.split("-");
+  const month = months[monthAbbr] || "01";
 
   return new Date(`${year}-${month}-${day}T${time}:00`);
-}
+};
 
 /**
  * Extracts directory path and file entries from the hidden <template id="table-index">
@@ -64,44 +76,48 @@ export const parseDate = (dateStr: string): Date|null => {
  * @returns FileIndex containing the current path and parsed file entries.
  */
 export const parseTemplate = (): FileIndex => {
-  if (typeof document === 'undefined') {
-    return { path: '', files: [] };
+  if (typeof document === "undefined") {
+    return { path: "", files: [] };
   }
 
-  const template = document.getElementById('table-index') as HTMLTemplateElement;
+  const template = document.getElementById(
+    "table-index",
+  ) as HTMLTemplateElement;
   if (!template) {
-    return { path: '', files: [] };
+    return { path: "", files: [] };
   }
 
-  const h1 = template.content.querySelector('h1');
-  const path = h1?.textContent?.trim() || '';
+  const h1 = template.content.querySelector("h1");
+  const path = h1?.textContent?.trim() || "";
 
-  const tbody = template.content.querySelector('tbody');
+  const tbody = template.content.querySelector("tbody");
   if (!tbody) {
     return { path, files: [] };
   }
 
-  const files: FileEntry[] = Array.from(tbody.querySelectorAll('tr')).map((row) => {
-    const linkCell = row.querySelector('td.link a');
-    const sizeCell = row.querySelector('td.size');
-    const dateCell = row.querySelector('td.date');
+  const files: FileEntry[] = Array.from(tbody.querySelectorAll("tr")).map(
+    (row) => {
+      const linkCell = row.querySelector("td.link a");
+      const sizeCell = row.querySelector("td.size");
+      const dateCell = row.querySelector("td.date");
 
-    let name = linkCell?.textContent?.trim() || '';
-    const link = linkCell?.getAttribute('href') || '';
-    const sizeRaw = sizeCell?.textContent?.trim() || '-';
-    const dateRaw = dateCell?.textContent?.trim() || '';
+      let name = linkCell?.textContent?.trim() || "";
+      const link = linkCell?.getAttribute("href") || "";
+      const sizeRaw = sizeCell?.textContent?.trim() || "-";
+      const dateRaw = dateCell?.textContent?.trim() || "";
 
-    const isDirectory = link.endsWith('/');
-    const size = parseSize(sizeRaw);
-    const date = parseDate(dateRaw);
+      const isDirectory = link.endsWith("/");
+      const size = parseSize(sizeRaw);
+      const date = parseDate(dateRaw);
 
-    // Identify parent directory by its href and set name to ".."
-    if (link === '../') {
-      name = '..';
-    }
+      // Identify parent directory by its href and set name to ".."
+      if (link === "../") {
+        name = "..";
+      }
 
-    return { name, link, size, date, isDirectory };
-  });
+      return { name, link, size, date, isDirectory };
+    },
+  );
 
   return { path, files };
 };

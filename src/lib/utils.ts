@@ -1,36 +1,34 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import type { FileEntry } from "@typings/files";
+import { type ClassValue, clsx } from "clsx";
 import {
-  Folder,
-  File,
-  FileText,
-  FileImage,
-  FileVideo,
-  FileAudio,
-  FileArchive,
-  FileSpreadsheet,
-  FileCode,
   Binary,
+  File,
+  FileArchive,
+  FileAudio,
+  FileCode,
+  FileImage,
+  FileSpreadsheet,
+  FileText,
+  FileVideo,
+  Folder,
+  type LucideIcon,
 } from "lucide-react";
-import { FileEntry } from "@typings/files";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
-
-type SortColumn = 'name' | 'size' | 'date';
-type SortDirection = 'asc' | 'desc';
-
-
+type SortColumn = "name" | "size" | "date";
+type SortDirection = "asc" | "desc";
 
 export function getFileIcon(fileName: string, isDirectory: boolean) {
   if (isDirectory) return Folder;
-  if (!fileName.includes('.')) return Binary;
+  if (!fileName.includes(".")) return Binary;
 
-  const extension = fileName.split('.').pop()?.toLowerCase();
+  const extension = fileName.split(".").pop()?.toLowerCase();
 
-  const iconMap: Record<string, any> = {
+  const iconMap: Record<string, LucideIcon> = {
     txt: FileText,
     md: FileText,
     rtf: FileText,
@@ -57,7 +55,7 @@ export function getFileIcon(fileName: string, isDirectory: boolean) {
     ogg: FileAudio,
     zip: FileArchive,
     rar: FileArchive,
-    '7z': FileArchive,
+    "7z": FileArchive,
     tar: FileArchive,
     gz: FileArchive,
     js: FileCode,
@@ -96,14 +94,16 @@ export function sortFiles(
   const sorted = [...files];
 
   // Helper to wrap a comparator and always put the parent directory first
-  const withParentPriority = (compareFn: (a: FileEntry, b: FileEntry) => number) => {
+  const withParentPriority = (
+    compareFn: (a: FileEntry, b: FileEntry) => number,
+  ) => {
     return (a: FileEntry, b: FileEntry): number => {
-      const aIsParent = a.link === '../';
-      const bIsParent = b.link === '../';
+      const aIsParent = a.link === "../";
+      const bIsParent = b.link === "../";
 
       if (aIsParent && !bIsParent) return -1; // parent comes first
-      if (!aIsParent && bIsParent) return 1;  // parent comes first
-      if (aIsParent && bIsParent) return 0;   // both parent (shouldn't happen)
+      if (!aIsParent && bIsParent) return 1; // parent comes first
+      if (aIsParent && bIsParent) return 0; // both parent (shouldn't happen)
 
       // Normal comparison
       return compareFn(a, b);
@@ -118,45 +118,47 @@ export function sortFiles(
           return a.isDirectory ? -1 : 1;
         }
         return naturalCompare(a.name, b.name);
-      })
+      }),
     );
   }
 
   // Column‑based sort – direction defaults to 'asc'
-  const dir = direction ?? 'asc';
-  const multiplier = dir === 'asc' ? 1 : -1;
+  const dir = direction ?? "asc";
+  const multiplier = dir === "asc" ? 1 : -1;
 
   return sorted.sort(
     withParentPriority((a, b) => {
       let cmp = 0;
 
       switch (column) {
-        case 'name':
+        case "name":
           cmp = naturalCompare(a.name, b.name);
           break;
 
-        case 'size':
+        case "size":
           if (a.size === null && b.size === null) cmp = 0;
-          else if (a.size === null) cmp = 1;      // nulls last
+          else if (a.size === null)
+            cmp = 1; // nulls last
           else if (b.size === null) cmp = -1;
           else cmp = a.size.bytes - b.size.bytes;
           break;
 
-        case 'date':
+        case "date":
           if (a.date === null && b.date === null) cmp = 0;
           else if (a.date === null) cmp = 1;
           else if (b.date === null) cmp = -1;
           else cmp = a.date.getTime() - b.date.getTime();
           break;
 
-        default:
+        default: {
           // Exhaustiveness check
           const _: never = column;
           return 0;
+        }
       }
 
       return cmp * multiplier;
-    })
+    }),
   );
 }
 

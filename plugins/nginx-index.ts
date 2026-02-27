@@ -1,6 +1,6 @@
-import { PluginOption } from 'vite';
-import fs from 'fs';
-import path from 'path';
+import fs from "node:fs";
+import path from "node:path";
+import type { PluginOption } from "vite";
 
 /**
  * Options for configuring the nginxIndex plugin.
@@ -12,6 +12,13 @@ interface Options {
    * @default false
    */
   removeIndex?: boolean;
+}
+
+interface Entry {
+  name: string;
+  type: string;
+  mtime?: string | null;
+  size?: number | null;
 }
 
 /**
@@ -31,43 +38,44 @@ interface Options {
  */
 export const nginxIndex = (options?: Options): PluginOption => {
   return {
-    name: 'fancy-index',
-    enforce: 'post',
+    name: "fancy-index",
+    enforce: "post",
 
     /**
      * At build time, extract header and footer from index.html using the `{{index}}` marker.
      * Emits header.html and footer.html as separate assets.
      */
     generateBundle(_, bundle) {
-      const indexHtml = bundle['index.html'];
+      const indexHtml = bundle["index.html"];
       if (indexHtml) {
-        const htmlContent = indexHtml['source'];
-        const marker = '{{index}}';
+        // biome-ignore lint/complexity/useLiteralKeys: The typing is incorrect
+        const htmlContent = indexHtml["source"];
+        const marker = "{{index}}";
         const markerIndex = htmlContent.indexOf(marker);
 
         if (markerIndex === -1) {
           throw new Error(
-            `Marker "${marker}" not found in index.html. Ensure it exists exactly as shown.`
+            `Marker "${marker}" not found in index.html. Ensure it exists exactly as shown.`,
           );
         }
 
-        const header = htmlContent.substring(0, markerIndex) + '<h1>';
+        const header = `${htmlContent.substring(0, markerIndex)}<h1>`;
         const footer = htmlContent.substring(markerIndex + marker.length);
 
         this.emitFile({
-          type: 'asset',
-          fileName: 'header.html',
-          source: header
+          type: "asset",
+          fileName: "header.html",
+          source: header,
         });
 
         this.emitFile({
-          type: 'asset',
-          fileName: 'footer.html',
-          source: footer
+          type: "asset",
+          fileName: "footer.html",
+          source: footer,
         });
 
         if (options?.removeIndex) {
-          delete bundle['index.html'];
+          delete bundle["index.html"];
         }
       }
     },
@@ -78,22 +86,22 @@ export const nginxIndex = (options?: Options): PluginOption => {
      */
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
-        if (req.method !== 'GET') return next();
+        if (req.method !== "GET") return next();
 
         const url = new URL(req.originalUrl, `http://${req.headers.host}`);
         const pathname = url.pathname;
 
         // Skip internal Vite requests
         if (
-          pathname.startsWith('/@') ||
-          pathname.startsWith('/node_modules/') ||
-          pathname === '/favicon.ico'
+          pathname.startsWith("/@") ||
+          pathname.startsWith("/node_modules/") ||
+          pathname === "/favicon.ico"
         ) {
           return next();
         }
 
         // Directories are handled by transformIndexHtml
-        if (pathname.endsWith('/')) {
+        if (pathname.endsWith("/")) {
           return next();
         }
 
@@ -123,7 +131,11 @@ export const nginxIndex = (options?: Options): PluginOption => {
           // Copy headers, skipping problematic ones
           response.headers.forEach((value, key) => {
             const lowerKey = key.toLowerCase();
-            if (!['content-encoding', 'transfer-encoding', 'connection'].includes(lowerKey)) {
+            if (
+              !["content-encoding", "transfer-encoding", "connection"].includes(
+                lowerKey,
+              )
+            ) {
               res.setHeader(key, value);
             }
           });
@@ -131,10 +143,10 @@ export const nginxIndex = (options?: Options): PluginOption => {
           const buffer = await response.arrayBuffer();
           res.end(Buffer.from(buffer));
         } catch (err) {
-          console.error('[fancy-index] Proxy error:', err);
+          console.error("[fancy-index] Proxy error:", err);
           if (!res.headersSent) {
             res.statusCode = 500;
-            res.end('Proxy error');
+            res.end("Proxy error");
           }
         }
       });
@@ -147,18 +159,23 @@ export const nginxIndex = (options?: Options): PluginOption => {
      */
     async transformIndexHtml(html, ctx) {
       // Only run in dev server
-      if (process.env.NODE_ENV !== 'development' || ctx.server.config.command !== 'serve') {
+      if (
+        process.env.NODE_ENV !== "development" ||
+        ctx.server.config.command !== "serve"
+      ) {
         return html;
       }
 
-      const pathname = ctx.originalUrl.split('?')[0];
-      if (!pathname.endsWith('/')) return html;
+      const pathname = ctx.originalUrl.split("?")[0];
+      if (!pathname.endsWith("/")) return html;
 
       const jsonUrl = `https://raw.communitydragon.org/json${pathname}`;
       try {
         const response = await fetch(jsonUrl);
         if (!response.ok) {
-          console.warn(`[fancy-index] ${jsonUrl} returned ${response.status} – skipping injection`);
+          console.warn(
+            `[fancy-index] ${jsonUrl} returned ${response.status} – skipping injection`,
+          );
           return html;
         }
 
@@ -174,13 +191,13 @@ export const nginxIndex = (options?: Options): PluginOption => {
 
         return html.replace(
           templateRegex,
-          `<template id="table-index">${templateContent}</template>`
+          `<template id="table-index">${templateContent}</template>`,
         );
       } catch (error) {
-        console.error('Error generating index table:', error);
+        console.error("Error generating index table:", error);
         return html;
       }
-    }
+    },
   };
 };
 
@@ -191,11 +208,11 @@ export const nginxIndex = (options?: Options): PluginOption => {
  * @returns Formatted size string.
  */
 function formatSize(bytes: number): string {
-  if (bytes === 0) return '0 B';
+  if (bytes === 0) return "0 B";
   const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const sizes = ["B", "KB", "MB", "GB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+  return `${parseFloat((bytes / k ** i).toFixed(1))} ${sizes[i]}`;
 }
 
 /**
@@ -206,12 +223,25 @@ function formatSize(bytes: number): string {
  */
 function formatDate(mtime: string): string {
   const date = new Date(mtime);
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const month = months[date.getUTCMonth()];
-  const day = String(date.getUTCDate()).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, "0");
   const year = date.getUTCFullYear();
-  const hours = String(date.getUTCHours()).padStart(2, '0');
-  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const hours = String(date.getUTCHours()).padStart(2, "0");
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
@@ -223,16 +253,16 @@ function formatDate(mtime: string): string {
  * @param currentPath - The path being listed (e.g., "/some/dir/").
  * @returns HTML string to be inserted into the template.
  */
-function generateDirectoryHTML(entries: any[], currentPath: string): string {
+function generateDirectoryHTML(entries: Entry[], currentPath: string): string {
   let displayPath = currentPath;
-  if (!displayPath.endsWith('/')) displayPath += '/';
-  if (displayPath === '/') displayPath = '/';
+  if (!displayPath.endsWith("/")) displayPath += "/";
+  if (displayPath === "/") displayPath = "/";
 
   const header = `<h1>${displayPath}</h1>`;
   const rows = [];
 
   // Parent directory link unless at root
-  if (currentPath !== '/') {
+  if (currentPath !== "/") {
     rows.push(`<tr>
       <td class="link"><a href="../" title="..">../</a></td>
       <td class="size">-</td>
@@ -240,18 +270,18 @@ function generateDirectoryHTML(entries: any[], currentPath: string): string {
     </tr>`);
   }
 
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     const name = entry.name;
     const type = entry.type;
     const mtime = entry.mtime;
     const size = entry.size;
 
-    const link = type === 'directory' ? `${name}/` : name;
-    const sizeDisplay = type === 'directory' ? '-' : formatSize(size);
-    const dateDisplay = mtime ? formatDate(mtime) : '';
+    const link = type === "directory" ? `${name}/` : name;
+    const sizeDisplay = type === "directory" ? "-" : formatSize(size);
+    const dateDisplay = mtime ? formatDate(mtime) : "";
 
     rows.push(`<tr>
-      <td class="link"><a href="${link}" title="${name}">${name}${type === 'directory' ? '/' : ''}</a></td>
+      <td class="link"><a href="${link}" title="${name}">${name}${type === "directory" ? "/" : ""}</a></td>
       <td class="size">${sizeDisplay}</td>
       <td class="date">${dateDisplay}</td>
     </tr>`);
@@ -267,7 +297,7 @@ function generateDirectoryHTML(entries: any[], currentPath: string): string {
         </tr>
       </thead>
       <tbody>
-        ${rows.join('')}
+        ${rows.join("")}
       </tbody>
     </table>
   `;
