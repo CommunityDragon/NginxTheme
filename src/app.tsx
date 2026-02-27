@@ -1,53 +1,57 @@
-import type { FunctionalComponent } from 'preact';
-import type { FileEntry } from '@typings/files';
+import heroImage from "@assets/hero.jpg";
+import { FileTable } from "@components/features/file-explorer/file-table";
+import { Hero } from "@components/global/hero";
+import { NavBar } from "@components/global/navbar";
+import { ThemeProvider } from "@components/providers/theme-provider";
+import { Card, CardContent } from "@components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
+import type { FileEntry } from "@typings/files";
+import { AppWindowIcon, CodeIcon } from "lucide-react";
+import type { FunctionalComponent } from "preact";
 
-import { FileTable } from '@components/file-table';
-
-import './style.css';
-import whiteLogo from '@assets/logo-white.png';
-import logo from '@assets/logo.png';
-import { ThemeProvider } from '@components/theme-provider';
-import { NavBar } from '@components/nav-bar';
-import { Card, CardContent, CardHeader } from '@components/ui/card';
-import { PathBreadcrumbs } from '@components/path-breadcrumbs';
-import { Separator } from '@components/ui/separator';
+import "./style.css";
+import { Main } from "@components/global/main";
 
 interface AppProps {
   path: string;
   files: FileEntry[];
 }
 
-export const App: FunctionalComponent<AppProps> = ({ path, files }) => (
-  <ThemeProvider storageKey="ui-theme">
-    <NavBar />
-    <div>
-      <div class="relative py-8">
-        <div className="flex gap-4 w-min m-auto items-center align-middle">
-          <div className="grow">
-            <h1 className="scroll-m-20 text-right text-4xl font-extrabold tracking-tight text-nowrap">
-              Hoarding data from <br />Riot Games since 2017
-            </h1>
-          </div>
-          <div>
-              <picture className="h-auto w-20 block">
-                  <source srcset={whiteLogo} media="(prefers-color-scheme: dark)" />
-                  <img alt="CommunityDragon" src={logo} height="128" width="128" />
-              </picture>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div className="relative">
-      <div className="flex flex-col gap-4 max-w-5xl m-auto p-4 pb-12">
-        <Card>
-          <CardHeader>
-            <PathBreadcrumbs path={path ?? '/'} />
-          </CardHeader>
-          <CardContent>
-            <FileTable files={files} />
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  </ThemeProvider>
-);
+export const App: FunctionalComponent<AppProps> = ({ path, files }) => {
+  console.log(heroImage);
+  return (
+    <ThemeProvider storageKey="ui-theme">
+      <NavBar />
+      <Hero />
+      <Main path={path}>
+        <Tabs defaultValue="preview">
+          <TabsList>
+            <TabsTrigger value="explorer">
+              <AppWindowIcon />
+              File Explorer
+            </TabsTrigger>
+            <TabsTrigger value="binviewer">
+              <CodeIcon />
+              .BIN Viewer
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="explorer">
+            <Card className="py-2">
+              <CardContent className="px-2">
+                <FileTable files={files} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="binviewer">
+            <div className="p-4">
+              <h2 className="text-xl font-bold">.BIN Viewer</h2>
+              <p className="text-muted-foreground">
+                View and analyze .BIN files from League of Legends.
+              </p>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </Main>
+    </ThemeProvider>
+  );
+};

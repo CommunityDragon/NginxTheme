@@ -20,7 +20,7 @@ export interface FileEntry {
   /**
    * Last modified date.
    */
-  date: Date|null;
+  date: Date | null;
 
   /**
    * Whether this entry is a directory.
@@ -43,5 +43,5 @@ export interface FileIndex {
   files: FileEntry[];
 }
 
-export type SortColumn = 'name' | 'size' | 'date';
-export type SortDirection = 'asc' | 'desc';
+export type SortColumn = "name" | "size" | "date";
+export type SortDirection = "asc" | "desc";

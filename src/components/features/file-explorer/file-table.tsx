@@ -1,17 +1,17 @@
-import { useState, useMemo } from 'react';
-import type { FileEntry, SortColumn, SortDirection } from '@typings/files';
+import { getFileIcon, sortFiles } from "@lib/utils";
+import type { FileEntry, SortColumn, SortDirection } from "@typings/files";
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableHead,
   TableBody,
   TableCell,
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
-import { getFileIcon, sortFiles } from '@lib/utils';
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface Props {
   files: FileEntry[];
@@ -20,34 +20,34 @@ interface Props {
 export const FileTable: React.FC<Props> = ({ files }) => {
   // Start with no sorting
   const [sortColumn, setSortColumn] = useState<SortColumn | null>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc'); // only used when sortColumn is not null
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc"); // only used when sortColumn is not null
 
   const sortedFiles = useMemo(
     () => sortFiles(files, sortColumn, sortDirection),
-    [files, sortColumn, sortDirection]
+    [files, sortColumn, sortDirection],
   );
 
   const toggleSort = (column: SortColumn) => {
     if (sortColumn === column) {
       // Same column: cycle asc → desc → unsorted
-      if (sortDirection === 'asc') {
-        setSortDirection('desc');
-      } else if (sortDirection === 'desc') {
+      if (sortDirection === "asc") {
+        setSortDirection("desc");
+      } else if (sortDirection === "desc") {
         setSortColumn(null); // go to unsorted
         // direction can stay as 'desc' or be reset; it's ignored when column is null
       }
     } else {
       // Different column: set to asc
       setSortColumn(column);
-      setSortDirection('asc');
+      setSortDirection("asc");
     }
   };
 
   const formatDate = (date: Date | null) => {
-    if (!date) return '-';
+    if (!date) return "-";
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
@@ -55,7 +55,7 @@ export const FileTable: React.FC<Props> = ({ files }) => {
     if (sortColumn !== column) {
       return <ArrowUpDown className="ml-2 h-4 w-4" />;
     }
-    return sortDirection === 'asc' ? (
+    return sortDirection === "asc" ? (
       <ArrowUp className="ml-2 h-4 w-4" />
     ) : (
       <ArrowDown className="ml-2 h-4 w-4" />
@@ -68,21 +68,33 @@ export const FileTable: React.FC<Props> = ({ files }) => {
         <TableHeader>
           <TableRow>
             <TableHead className="w-full">
-              <Button variant="ghost" size="sm" onClick={() => toggleSort('name')}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => toggleSort("name")}
+              >
                 Name
                 <SortIcon column="name" />
               </Button>
             </TableHead>
 
             <TableHead className="text-right whitespace-nowrap w-min">
-              <Button variant="ghost" size="sm" onClick={() => toggleSort('size')}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => toggleSort("size")}
+              >
                 Size
                 <SortIcon column="size" />
               </Button>
             </TableHead>
 
             <TableHead className="text-right whitespace-nowrap w-min">
-              <Button variant="ghost" size="sm" onClick={() => toggleSort('date')}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => toggleSort("date")}
+              >
                 Modified
                 <SortIcon column="date" />
               </Button>
@@ -97,7 +109,7 @@ export const FileTable: React.FC<Props> = ({ files }) => {
                 <TableCell className="font-medium">
                   <a href={file.link} className="flex items-center gap-2">
                     <Icon className="h-4 w-4" />
-                    {file.name.replace(/\/+$/, '')}
+                    {file.name.replace(/\/+$/, "")}
                   </a>
                 </TableCell>
 
@@ -107,7 +119,7 @@ export const FileTable: React.FC<Props> = ({ files }) => {
                       {file.size.raw}
                     </Badge>
                   ) : (
-                    '-'
+                    "-"
                   )}
                 </TableCell>
 
