@@ -1,3 +1,4 @@
+import { Home, type LucideIcon } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -20,11 +21,11 @@ interface Props {
 }
 
 type crumb = {
-  label: string;
+  label: string | LucideIcon;
   href: string;
 };
 
-export function PathBreadcrumbs({ path = "/" }: Props) {
+export const Breadcrumbs: React.FC<Props> = ({ path = "/" }) => {
   const segments = path.split("/").filter((segment) => segment !== "");
 
   const breadcrumbs: crumb[] = segments.map((segment, index) => {
@@ -35,8 +36,10 @@ export function PathBreadcrumbs({ path = "/" }: Props) {
     };
   });
 
-  const allItems =
-    breadcrumbs.length === 0 ? [{ label: "Home", href: "/" }] : breadcrumbs;
+  const allItems = [
+    { label: <Home size={16} strokeWidth={1} />, href: "/" },
+    ...breadcrumbs,
+  ];
 
   const maxVisible = 6;
   const isTooLong = allItems.length > maxVisible;
@@ -92,4 +95,4 @@ export function PathBreadcrumbs({ path = "/" }: Props) {
       </BreadcrumbList>
     </Breadcrumb>
   );
-}
+};

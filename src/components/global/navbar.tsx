@@ -35,7 +35,7 @@ export const NavBar: React.FC = () => {
                       navigationMenuTriggerStyle(),
                       "bg-transparent",
                     )}
-                    render={<a href="https://www.communitydragon.org">Home</a>}
+                    render={<a href="/">Home</a>}
                   />
                 </NavigationMenuItem>
 
