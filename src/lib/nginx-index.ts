@@ -86,7 +86,7 @@ export const parseTemplate = (): FileIndex => {
     const sizeCell = row.querySelector('td.size');
     const dateCell = row.querySelector('td.date');
 
-    const name = linkCell?.textContent?.trim() || '';
+    let name = linkCell?.textContent?.trim() || '';
     const link = linkCell?.getAttribute('href') || '';
     const sizeRaw = sizeCell?.textContent?.trim() || '-';
     const dateRaw = dateCell?.textContent?.trim() || '';
@@ -95,8 +95,13 @@ export const parseTemplate = (): FileIndex => {
     const size = parseSize(sizeRaw);
     const date = parseDate(dateRaw);
 
+    // Identify parent directory by its href and set name to ".."
+    if (link === '../') {
+      name = '..';
+    }
+
     return { name, link, size, date, isDirectory };
   });
 
   return { path, files };
-}
+};

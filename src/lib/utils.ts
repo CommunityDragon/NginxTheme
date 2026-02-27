@@ -79,7 +79,7 @@ export function getFileIcon(fileName: string, isDirectory: boolean) {
 }
 
 /**
- * Sorts an array of FileEntry.
+ * Sorts an array of FileEntry, always keeping the parent directory ("../") at the top.
  * If no column is provided, sorts directories first, then files, each group by name using natural order.
  * If a column is provided, sorts by that column (respecting direction), ignoring directory/file type.
  *
@@ -95,53 +95,69 @@ export function sortFiles(
 ): FileEntry[] {
   const sorted = [...files];
 
-  // Default sort: directories first, then files, both sorted by name (natural, case‑insensitive)
+  // Helper to wrap a comparator and always put the parent directory first
+  const withParentPriority = (compareFn: (a: FileEntry, b: FileEntry) => number) => {
+    return (a: FileEntry, b: FileEntry): number => {
+      const aIsParent = a.link === '../';
+      const bIsParent = b.link === '../';
+
+      if (aIsParent && !bIsParent) return -1; // parent comes first
+      if (!aIsParent && bIsParent) return 1;  // parent comes first
+      if (aIsParent && bIsParent) return 0;   // both parent (shouldn't happen)
+
+      // Normal comparison
+      return compareFn(a, b);
+    };
+  };
+
+  // Default sort: directories first, then name natural order
   if (column == null) {
-    return sorted.sort((a, b) => {
-      // Directories first
-      if (a.isDirectory !== b.isDirectory) {
-        return a.isDirectory ? -1 : 1;
-      }
-      // Same type → natural sort by name
-      return naturalCompare(a.name, b.name);
-    });
+    return sorted.sort(
+      withParentPriority((a, b) => {
+        if (a.isDirectory !== b.isDirectory) {
+          return a.isDirectory ? -1 : 1;
+        }
+        return naturalCompare(a.name, b.name);
+      })
+    );
   }
 
   // Column‑based sort – direction defaults to 'asc'
   const dir = direction ?? 'asc';
   const multiplier = dir === 'asc' ? 1 : -1;
 
-  return sorted.sort((a, b) => {
-    let cmp = 0;
+  return sorted.sort(
+    withParentPriority((a, b) => {
+      let cmp = 0;
 
-    switch (column) {
-      case 'name':
-        cmp = naturalCompare(a.name, b.name);
-        break;
+      switch (column) {
+        case 'name':
+          cmp = naturalCompare(a.name, b.name);
+          break;
 
-      case 'size':
-        // Nulls always last
-        if (a.size === null && b.size === null) cmp = 0;
-        else if (a.size === null) cmp = 1;      // a is null → a after b
-        else if (b.size === null) cmp = -1;     // b is null → a before b
-        else cmp = a.size.bytes - b.size.bytes;
-        break;
+        case 'size':
+          if (a.size === null && b.size === null) cmp = 0;
+          else if (a.size === null) cmp = 1;      // nulls last
+          else if (b.size === null) cmp = -1;
+          else cmp = a.size.bytes - b.size.bytes;
+          break;
 
-      case 'date':
-        if (a.date === null && b.date === null) cmp = 0;
-        else if (a.date === null) cmp = 1;
-        else if (b.date === null) cmp = -1;
-        else cmp = a.date.getTime() - b.date.getTime();
-        break;
+        case 'date':
+          if (a.date === null && b.date === null) cmp = 0;
+          else if (a.date === null) cmp = 1;
+          else if (b.date === null) cmp = -1;
+          else cmp = a.date.getTime() - b.date.getTime();
+          break;
 
-      default:
-        // Exhaustiveness check
-        const _: never = column;
-        return 0;
-    }
+        default:
+          // Exhaustiveness check
+          const _: never = column;
+          return 0;
+      }
 
-    return cmp * multiplier;
-  });
+      return cmp * multiplier;
+    })
+  );
 }
 
 /**
