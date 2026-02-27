@@ -37,13 +37,13 @@ export function PathBreadcrumbs({ path }: Props) {
     }
   })
 
-  const allItems = [{ label: "Home", href: "/" }, ...breadcrumbs]
+  const allItems = breadcrumbs.length === 0 ? [{ label: "Home", href: "/" }] : breadcrumbs;
 
   const maxVisible = 6
   const isTooLong = allItems.length > maxVisible
 
   const itemsToDisplay = isTooLong
-    ? [...allItems.slice(0, maxVisible - 2), allItems.slice(maxVisible - 2, allItems.length - 2), allItems[allItems.length - 1]]
+    ? [...allItems.slice(0, maxVisible - 2), allItems.slice(maxVisible - 2, allItems.length - 1), allItems[allItems.length - 1]]
     : allItems
 
   return (
