@@ -11,6 +11,7 @@ export default defineConfig(({ command }) => ({
     plugins: [
         tsconfigPaths(),
         preact({
+            
             prerender: {
                 enabled: true,
                 renderTarget: '#app',
@@ -37,6 +38,8 @@ export default defineConfig(({ command }) => ({
     ],
     resolve: {
         alias: {
+            "react": 'preact/compat',
+            'react-dom': 'preact/compat',
             "@": path.resolve(__dirname, "./src"),
         },
     },

@@ -4,8 +4,8 @@ import { parseTemplate } from '@lib/nginx-index';
 import { App } from './app';
 
 const Root: FunctionalComponent = () => {
-  const { currentPath, files } = parseTemplate();
-  return <App currentPath={currentPath} files={files} />;
+  const { path, files } = parseTemplate();
+  return <App path={path} files={files} />;
 };
 
 if (typeof window !== 'undefined') {
@@ -13,5 +13,5 @@ if (typeof window !== 'undefined') {
 }
 
 export async function prerender() {
-  return await ssr(<App currentPath="" files={[]} />);
+  return await ssr(<App path="" files={[]} />);
 }
