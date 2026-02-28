@@ -19,6 +19,8 @@
       "@components/*": ["./src/components/*"],
       "@assets/*": ["./src/assets/*"],
       "@typings/*": ["./src/typings/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@lib/*": ["./src/lib/*"],
       "@/*": ["./src/*"]
     }

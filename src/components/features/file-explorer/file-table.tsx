@@ -1,9 +1,5 @@
-import { getFileIcon, sortFiles } from "@lib/utils";
-import type { FileEntry, SortColumn, SortDirection } from "@typings/files";
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@components/ui/badge";
+import { Button } from "@components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,16 +7,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@components/ui/table";
+import { useIndex } from "@hooks/nginx-index";
+import { getFileIcon, sortFiles } from "@lib/utils";
+import type { SortColumn, SortDirection } from "@typings/files";
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import { useMemo, useState } from "react";
 
-interface Props {
-  files: FileEntry[];
-}
-
-export const FileTable: React.FC<Props> = ({ files }) => {
-  // Start with no sorting
+export const FileTable: React.FC = () => {
+  const { files } = useIndex();
   const [sortColumn, setSortColumn] = useState<SortColumn | null>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>("asc"); // only used when sortColumn is not null
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
   const sortedFiles = useMemo(
     () => sortFiles(files, sortColumn, sortDirection),
@@ -29,15 +26,12 @@ export const FileTable: React.FC<Props> = ({ files }) => {
 
   const toggleSort = (column: SortColumn) => {
     if (sortColumn === column) {
-      // Same column: cycle asc → desc → unsorted
       if (sortDirection === "asc") {
         setSortDirection("desc");
       } else if (sortDirection === "desc") {
-        setSortColumn(null); // go to unsorted
-        // direction can stay as 'desc' or be reset; it's ignored when column is null
+        setSortColumn(null);
       }
     } else {
-      // Different column: set to asc
       setSortColumn(column);
       setSortDirection("asc");
     }

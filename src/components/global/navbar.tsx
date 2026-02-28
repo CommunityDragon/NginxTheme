@@ -1,8 +1,6 @@
 import logo from "@assets/logo-small.png";
 
 import whiteLogo from "@assets/logo-small-white.png";
-import { cn } from "@lib/utils";
-import { HandHeart } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,7 +9,9 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+} from "@components/ui/navigation-menu";
+import { cn } from "@lib/utils";
+import { HandHeart } from "lucide-react";
 import { Button } from "../ui/button";
 
 export const NavBar: React.FC = () => {

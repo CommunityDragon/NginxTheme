@@ -190,3 +190,18 @@ function naturalCompare(a: string, b: string): number {
   // Shorter string comes first if all equal parts so far
   return aParts.length - bParts.length;
 }
+
+/**
+ * Escapes special characters for use in a regular expression.
+ */
+export const escapeRegex = (str: string): string =>
+  str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * Fetches the file list for a given patch version.
+ */
+export const fetchFilelist = async (patch: string): Promise<string> => {
+  const response = await fetch(`/${patch}/cdragon/files.exported.txt`);
+  if (!response.ok) throw new Error("Failed to fetch file list");
+  return response.text();
+};

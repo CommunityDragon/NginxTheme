@@ -43,6 +43,7 @@ export default defineConfig(({ command }) => ({
     },
   },
   server: {
+    cors: true,
     watch: {
       ignored: ["**/.history/**"],
     },

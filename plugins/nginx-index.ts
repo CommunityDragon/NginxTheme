@@ -91,7 +91,7 @@ export const nginxIndex = (options?: Options): PluginOption => {
         const url = new URL(req.originalUrl, `http://${req.headers.host}`);
         const pathname = url.pathname;
 
-        // Skip internal Vite requests
+        // skip internal Vite requests
         if (
           pathname.startsWith("/@") ||
           pathname.startsWith("/node_modules/") ||
@@ -100,12 +100,12 @@ export const nginxIndex = (options?: Options): PluginOption => {
           return next();
         }
 
-        // Directories are handled by transformIndexHtml
+        // directories are handled by transformIndexHtml
         if (pathname.endsWith("/")) {
           return next();
         }
 
-        // Check if the file exists locally (project root or public dir)
+        // check if the file exists locally (project root or public dir)
         const root = server.config.root;
         const publicDir = server.config.publicDir;
         const localPath = path.join(root, pathname);
@@ -119,16 +119,16 @@ export const nginxIndex = (options?: Options): PluginOption => {
             return next();
           }
         } catch {
-          // Ignore stat errors
+          // ignore stat errors
         }
 
-        // Proxy to communitydragon
+        // proxy to communitydragon
         const targetUrl = `https://raw.communitydragon.org${pathname}`;
         try {
           const response = await fetch(targetUrl);
           res.statusCode = response.status;
 
-          // Copy headers, skipping problematic ones
+          // copy headers, skipping problematic ones
           response.headers.forEach((value, key) => {
             const lowerKey = key.toLowerCase();
             if (
@@ -158,7 +158,7 @@ export const nginxIndex = (options?: Options): PluginOption => {
      * The injection replaces the content of `<template id="table-index">`.
      */
     async transformIndexHtml(html, ctx) {
-      // Only run in dev server
+      // only run in dev server
       if (
         process.env.NODE_ENV !== "development" ||
         ctx.server.config.command !== "serve"
@@ -261,7 +261,7 @@ function generateDirectoryHTML(entries: Entry[], currentPath: string): string {
   const header = `<h1>${displayPath}</h1>`;
   const rows = [];
 
-  // Parent directory link unless at root
+  // parent directory link unless at root
   if (currentPath !== "/") {
     rows.push(`<tr>
       <td class="link"><a href="../" title="..">../</a></td>
