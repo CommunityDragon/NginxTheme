@@ -70,7 +70,7 @@ export const SearchResultTable: React.FC = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {results.map((result, index) => (
+        {results.slice(0, 10000).map((result, index) => (
           <TableRow key={index}>
             <TableCell>
               <a href={result.href}>{result.filename}</a>
