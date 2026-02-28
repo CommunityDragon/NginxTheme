@@ -109,28 +109,7 @@ export class FilelistDB {
 
 
 
-  getMatchingLines(file, query, isRegex:boolean) {
-    const start = Date.now();
-    const results = [];
-    const pattern = isRegex ? query : new RegExp(query, 'gi');
 
-    let match;
-    while ((match = pattern.exec(file)) !== null) {
-      
-      const matchIdx = match.index;
-      const startOfLine = file.lastIndexOf('\n', matchIdx) + 1;
-
-      let endOfLine = file.indexOf('\n', matchIdx);
-
-      if (endOfLine === -1) endOfLine = file.length;
-  
-      results.push(file.substring(startOfLine, endOfLine));
-      pattern.lastIndex = endOfLine;
-    }
-  
-    //console.log("Search Time: " + (Date.now() - start) + "ms");
-    return results;
-  }
 
 
   /**
