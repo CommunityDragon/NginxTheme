@@ -12,7 +12,7 @@ export const useFileExplorer = () => {
   const { mode, setLoading } = useSearch();
   const [results, setResults] = useState<SearchResult[]>([]);
   const [error, setError] = useState<Error | null>(null);
-
+  const useRegex=true;
   // Refs to store version and DB instance across renders
   const versionKeyRef = useRef<string | null>(null);
   const dbInstanceRef = useRef<FilelistDB | null>(null);
@@ -102,28 +102,36 @@ export const useFileExplorer = () => {
           }
           dbInstanceRef.current = new FilelistDB(versionKey);
         }
-
+        
         const db = dbInstanceRef.current;
 
         // Get file list from cache or network
-        let files = await db.getFileList();
-        if (!files) {
+        let file = await db.getFileList_NoCache();
+        if (!file){
           const filelistUrl = `${RAW_HOST}/${patch}/cdragon/files.exported.txt`;
           const response = await fetch(filelistUrl, {
             signal: abortController.signal,
           });
           if (!response.ok) throw new Error("Failed to fetch file list");
           const text = await response.text();
-          files = text.split("\n").filter((line) => line.trim() !== "");
-          await db.saveFileList(files);
+          //console.log("test_117"+text.split("\n"));
+          //const text=text2
+          //file=await text.split("\n").filter((line) => line.trim() !== "");
+          //console.log("raw filelist"+text);
+          db.saveFileList(text);
         }
 
         // Build regex with local prefix if in local mode
+
         const prefix = localPrefix();
-        const escapedQuery = escapeRegex(trimmedQuery);
+        let Query=trimmedQuery;
+        if(!useRegex){
+        Query = escapeRegex(trimmedQuery);}
+
         let regex: RegExp;
         try {
-          regex = new RegExp(`^${prefix}.*(?:${escapedQuery}).*$`, "mi");
+          regex = new RegExp(`^${prefix}.*?(?:${Query}).*$`, "gim");
+          
         } catch (e) {
           console.error("Invalid regex", e);
           setResults([]);
@@ -133,12 +141,19 @@ export const useFileExplorer = () => {
         // Perform search (worker‑based)
         const matches = await db.searchFileList(regex);
         const currentPatch = getPatch();
-        setResults(
-          matches.map((filename) => ({
-            filename,
-            href: `/${currentPatch}/${filename}`,
-          })),
-        );
+        if (matches){
+          setResults(
+            matches.map((filename) => ({
+              filename,
+              href: `/${currentPatch}/${filename}`,
+            })),
+          );
+        }
+        else{
+          setResults(
+            []
+          );
+        }
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return;
         setError(err instanceof Error ? err : new Error(String(err)));
