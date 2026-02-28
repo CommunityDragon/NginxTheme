@@ -1,4 +1,3 @@
-import { Home, type LucideIcon } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -6,15 +5,16 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+} from "@components/ui/breadcrumb";
+import { Button } from "@components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@components/ui/dropdown-menu";
+import { Home, type LucideIcon } from "lucide-react";
 
 interface Props {
   path?: string;
