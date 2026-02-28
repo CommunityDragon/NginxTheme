@@ -1,13 +1,15 @@
 // lib/filelist-db.ts
 
-const DB_NAME = "filelists";
-const STORE_NAME = "filelists";
+const DB_NAME = "file";
+const STORE_NAME = "file";
 const DB_VERSION = 1;
 
 export class FilelistDB {
   private static dbConnection: Promise<IDBDatabase> | null = null;
-
+  //private static filelist=null;
+  private static file;
   private version: string;
+
   private worker: Worker | null = null;
   private workerPromiseMap = new Map<
     string,
@@ -18,28 +20,53 @@ export class FilelistDB {
   >();
 
   constructor(version: string) {
+    
     this.version = version;
+    //console.log(version);
+    //FilelistDB.filelist=null;
+    //this.getFileList();
   }
 
   private static async getConnection(): Promise<IDBDatabase> {
     if (FilelistDB.dbConnection) return FilelistDB.dbConnection;
-
-    FilelistDB.dbConnection = new Promise((resolve, reject) => {
+   
+    FilelistDB.dbConnection = new Promise<IDBDatabase>((resolve, reject) => {
       const request = indexedDB.open(DB_NAME, DB_VERSION);
       request.onerror = () => reject(request.error);
       request.onsuccess = () => resolve(request.result);
       request.onupgradeneeded = (event) => {
+
         const db = (event.target as IDBOpenDBRequest).result;
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           db.createObjectStore(STORE_NAME, { keyPath: "version" });
         }
+        
       };
     });
-
+ 
     return FilelistDB.dbConnection;
   }
 
-  async getFileList(): Promise<string[] | undefined> {
+
+
+  async getFileList(): Promise<string | undefined> {
+    if (FilelistDB.file) return FilelistDB.file;
+    const db = await FilelistDB.getConnection();
+    FilelistDB.file=new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, "readonly");
+      const store = tx.objectStore(STORE_NAME);
+      const request = store.get(this.version);
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const result = request.result;
+        //console.log(result);
+        resolve(result?.file);
+      };
+    });
+    return FilelistDB.file
+  }
+  async getFileList_NoCache(): Promise<string| undefined> {
+    
     const db = await FilelistDB.getConnection();
     return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readonly");
@@ -48,20 +75,25 @@ export class FilelistDB {
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const result = request.result;
-        resolve(result?.files);
+        //console.log(result);
+        resolve(result?.file);
       };
     });
+    
   }
 
-  async saveFileList(files: string[]): Promise<void> {
+  async saveFileList(file:string): Promise<void> {
+    
+    FilelistDB.file=null;
     const db = await FilelistDB.getConnection();
     return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readwrite");
       const store = tx.objectStore(STORE_NAME);
-      const request = store.put({ version: this.version, files });
+      const request = store.put({ version: this.version, file });
       request.onerror = () => reject(request.error);
       request.onsuccess = () => resolve();
     });
+    
   }
 
   async deleteFileList(): Promise<void> {
@@ -75,26 +107,62 @@ export class FilelistDB {
     });
   }
 
+
+
+  getMatchingLines(file, query, isRegex:boolean) {
+    const start = Date.now();
+    const results = [];
+    const pattern = isRegex ? query : new RegExp(query, 'gi');
+
+    let match;
+    while ((match = pattern.exec(file)) !== null) {
+      
+      const matchIdx = match.index;
+      const startOfLine = file.lastIndexOf('\n', matchIdx) + 1;
+
+      let endOfLine = file.indexOf('\n', matchIdx);
+
+      if (endOfLine === -1) endOfLine = file.length;
+  
+      results.push(file.substring(startOfLine, endOfLine));
+      pattern.lastIndex = endOfLine;
+    }
+  
+    //console.log("Search Time: " + (Date.now() - start) + "ms");
+    return results;
+  }
+
+
   /**
    * Search the file list of this version using a regular expression.
    * The search runs in a Web Worker if supported.
-   * @param regex The RegExp to test against each filename
+   * @param query The RegExp to test against each filename
    * @returns Array of matching filenames
    */
-  async searchFileList(regex: RegExp): Promise<string[]> {
-    const files = await this.getFileList();
-    if (!files) return [];
-
+  async searchFileList(query): Promise<string[]> {
+    //const start2 = Date.now();
+    //const start3 = Date.now();
+    const file = await this.getFileList();
+    //console.log("files-fetch: "+(Date.now()-start3));
+    if (!file) return [];
+    //console.log(FilelistDB.file);
     // Fallback to main thread if workers are not supported
-    if (typeof Worker === "undefined") {
-      return files.filter((file) => regex.test(file));
-    }
-
+    //if (typeof Worker === "undefined") {
+    //console.log("regex: "+regex);
+    //const start = Date.now();
+    let res=file.match(query);
+      //console.log(res);//files.filter((file) => regex.test(file));
+      //console.log("main-thered-search: "+(Date.now()-start));
+      //console.log("total-search: "+(Date.now()-start2));
+      
+    return res;
+    /*}
+    const start4 = Date.now();
     this.initWorker();
-
+    console.log("worker-setup: "+(Date.now()-start4));
     const requestId = Math.random().toString(36).substring(2) + Date.now();
-
-    return new Promise((resolve, reject) => {
+    const start5= Date.now();
+    return new Promise<string[]>((resolve, reject) => {
       this.workerPromiseMap.set(requestId, { resolve, reject });
 
       // biome-ignore lint/style/noNonNullAssertion: debug
@@ -105,7 +173,9 @@ export class FilelistDB {
         flags: regex.flags,
         requestId,
       });
-    });
+    }).then((data) =>{console.log(("total-search,since_worker: "+(Date.now()-start2))+","+(Date.now()-start5));return data;});
+    */
+  
   }
 
   private initWorker() {
@@ -117,7 +187,9 @@ export class FilelistDB {
         if (type === 'search') {
           try {
             const regex = new RegExp(pattern, flags);
-            const matches = files.filter(file => regex.test(file));
+            const start = Date.now();
+            const matches =files.filter(file => regex.test(file));
+            console.log("2nd-thread-search: "+(Date.now()-start));
             self.postMessage({ type: 'result', matches, requestId });
           } catch (err) {
             self.postMessage({ type: 'error', error: err.message, requestId });
