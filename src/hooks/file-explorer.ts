@@ -12,7 +12,7 @@ export const useFileExplorer = () => {
   const { mode, setLoading } = useSearch();
   const [results, setResults] = useState<SearchResult[]>([]);
   const [error, setError] = useState<Error | null>(null);
-
+  const useRegex = true;
   // Refs to store version and DB instance across renders
   const versionKeyRef = useRef<string | null>(null);
   const dbInstanceRef = useRef<FilelistDB | null>(null);
@@ -120,25 +120,34 @@ export const useFileExplorer = () => {
 
         // Build regex with local prefix if in local mode
         const prefix = localPrefix();
-        const escapedQuery = escapeRegex(trimmedQuery);
+
+        const content = useRegex ? trimmedQuery : escapeRegex(trimmedQuery);
         let regex: RegExp;
         try {
-          regex = new RegExp(`^${prefix}.*(?:${escapedQuery}).*$`, "mi");
-        } catch (e) {
+          regex = new RegExp(`^${prefix}.*?(?:${content}).*$`, "gim");
+          //const fast_regexp =new RegExp(`$\\n${prefix}[^\\n]*?${content}[^\\n]*\\n`,"gim")
+          //regex=fast_regexp;
+        }
+        catch (e) {
           console.error("Invalid regex", e);
           setResults([]);
           return;
         }
-
-        // Perform search (worker‑based)
+        console.log(regex);
         const matches = await db.searchFileList(regex);
-        const currentPatch = getPatch();
-        setResults(
-          matches.map((filename) => ({
-            filename,
-            href: `/${currentPatch}/${filename}`,
-          })),
-        );
+        if (matches) {
+          setResults(
+            matches.map((filename) => ({
+              filename,
+              href: `/${currentPatch}/${filename}`,
+            })),
+          );
+        }
+        else {
+          setResults(
+            []
+          );
+        }
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return;
         setError(err instanceof Error ? err : new Error(String(err)));

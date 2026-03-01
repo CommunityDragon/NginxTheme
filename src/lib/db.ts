@@ -24,7 +24,7 @@ export class FilelistDB {
   private static async getConnection(): Promise<IDBDatabase> {
     if (FilelistDB.dbConnection) return FilelistDB.dbConnection;
 
-    FilelistDB.dbConnection = new Promise((resolve, reject) => {
+    FilelistDB.dbConnection = new Promise<IDBDatabase>((resolve, reject) => {
       const request = indexedDB.open(DB_NAME, DB_VERSION);
       request.onerror = () => reject(request.error);
       request.onsuccess = () => resolve(request.result);
@@ -39,7 +39,26 @@ export class FilelistDB {
     return FilelistDB.dbConnection;
   }
 
-  async getFileList(): Promise<string[] | undefined> {
+
+
+  async getFileList(): Promise<string | undefined> {
+    if (FilelistDB.file) return FilelistDB.file;
+    const db = await FilelistDB.getConnection();
+    FilelistDB.file = new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, "readonly");
+      const store = tx.objectStore(STORE_NAME);
+      const request = store.get(this.version);
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const result = request.result;
+        //console.log(result);
+        resolve(result?.file);
+      };
+    });
+    return FilelistDB.file
+  }
+  async getFileList_NoCache(): Promise<string | undefined> {
+
     const db = await FilelistDB.getConnection();
     return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readonly");
@@ -51,9 +70,12 @@ export class FilelistDB {
         resolve(result?.files);
       };
     });
+
   }
 
-  async saveFileList(files: string[]): Promise<void> {
+  async saveFileList(file: string): Promise<void> {
+
+    FilelistDB.file = null;
     const db = await FilelistDB.getConnection();
     return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readwrite");
@@ -81,31 +103,46 @@ export class FilelistDB {
    * @param regex The RegExp to test against each filename
    * @returns Array of matching filenames
    */
-  async searchFileList(regex: RegExp): Promise<string[]> {
-    const files = await this.getFileList();
-    if (!files) return [];
-
+  async searchFileList(query): Promise<string[]> {
+    const start = Date.now();
+    //const start3 = Date.now();
+    const file = await this.getFileList();
+    console.log("files-fetch: " + (Date.now() - start));
+    if (!file) return [];
+    console.log("File loaded in "+ (Date.now()-start) +"ms");
     // Fallback to main thread if workers are not supported
     if (typeof Worker === "undefined") {
-      return files.filter((file) => regex.test(file));
+      //console.log("regex: "+regex);
+      //const start = Date.now();
+      const start2 = Date.now();
+      let res = file.match(query);
+      console.log("query: " + (Date.now() - start2));
+      //console.log(res);
+      //console.log(res);//files.filter((file) => regex.test(file));
+      //console.log("main-thered-search: "+(Date.now()-start));
+      //console.log("total-search: "+(Date.now()-start2));
+
+      return res;
     }
+
 
     this.initWorker();
 
     const requestId = Math.random().toString(36).substring(2) + Date.now();
 
-    return new Promise((resolve, reject) => {
+    return new Promise<string[]>((resolve, reject) => {
       this.workerPromiseMap.set(requestId, { resolve, reject });
 
       // biome-ignore lint/style/noNonNullAssertion: debug
       this.worker!.postMessage({
         type: "search",
-        files,
-        pattern: regex.source,
-        flags: regex.flags,
+        file,
+        query,
         requestId,
       });
-    });
+    }).then((data) =>{console.log("total-query-time "+(Date.now()-start));return data;});
+
+
   }
 
   private initWorker() {
@@ -113,11 +150,13 @@ export class FilelistDB {
 
     const workerCode = `
       self.onmessage = (e) => {
-        const { type, files, pattern, flags, requestId } = e.data;
+        const { type, file, query, requestId } = e.data;
         if (type === 'search') {
           try {
-            const regex = new RegExp(pattern, flags);
-            const matches = files.filter(file => regex.test(file));
+
+            const start = Date.now();
+            const matches =file.match(query);
+            console.log("worker-query: "+(Date.now()-start));
             self.postMessage({ type: 'result', matches, requestId });
           } catch (err) {
             self.postMessage({ type: 'error', error: err.message, requestId });
