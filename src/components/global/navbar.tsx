@@ -12,11 +12,34 @@ import {
 } from "@components/ui/navigation-menu";
 import { cn } from "@lib/utils";
 import { HandHeart } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
 export const NavBar: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="bg-transparent fixed top-0 z-50 w-full">
+    <header
+      className={cn(
+        "fixed top-0 z-50 w-full transition-colors duration-200",
+        isScrolled
+          ? "border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80"
+          : "bg-transparent",
+      )}
+    >
       <div className="3xl:fixed:px-0 px-6 flex gap-4 items-center">
         <a href="/" className="block">
           <picture className="h-full w-full">
