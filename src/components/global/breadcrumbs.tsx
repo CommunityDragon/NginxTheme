@@ -1,3 +1,4 @@
+import { Home } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -5,23 +6,22 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@components/ui/breadcrumb";
-import { Button } from "@components/ui/button";
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@components/ui/dropdown-menu";
-import { Home, type LucideIcon } from "lucide-react";
+} from "@/components/ui/dropdown-menu";
 
 interface Props {
   path?: string;
 }
 
 type crumb = {
-  label: string | LucideIcon;
+  label: React.ReactNode;
   href: string;
 };
 
@@ -74,12 +74,13 @@ export const Breadcrumbs: React.FC<Props> = ({ path = "/" }) => {
                   />
                   <DropdownMenuContent
                     align="start"
-                    style={{ "--anchor-width": "auto" }}
+                    style={{ "--anchor-width": "auto" } as React.CSSProperties}
                     className="text-nowrap"
                   >
                     <DropdownMenuGroup>
                       {item.map((subItem) => (
                         <DropdownMenuItem
+                          key={subItem.href}
                           render={<a href={subItem.href}>{subItem.label}</a>}
                         />
                       ))}

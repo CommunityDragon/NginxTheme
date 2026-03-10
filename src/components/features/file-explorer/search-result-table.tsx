@@ -1,11 +1,12 @@
+import { useEffect } from "react";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@components/ui/empty";
-import { Spinner } from "@components/ui/spinner";
+} from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -13,10 +14,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@components/ui/table";
-import { useFileExplorer } from "@hooks/file-explorer";
-import { useSearch } from "@hooks/search";
-import { useEffect } from "react";
+} from "@/components/ui/table";
+import { useFileExplorer } from "@/hooks/file-explorer";
+import { useSearch } from "@/hooks/search";
 
 export const SearchResultTable: React.FC = () => {
   const { query, loading } = useSearch();
@@ -70,8 +70,8 @@ export const SearchResultTable: React.FC = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {results.slice(0, 10000).map((result, index) => (
-          <TableRow key={index}>
+        {results.slice(0, 10000).map((result) => (
+          <TableRow key={result.filename}>
             <TableCell>
               <a href={result.href}>{result.filename}</a>
             </TableCell>

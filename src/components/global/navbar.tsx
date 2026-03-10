@@ -1,6 +1,7 @@
-import logo from "@assets/logo-small.png";
-
-import whiteLogo from "@assets/logo-small-white.png";
+import { HandHeart, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import logo from "@/assets/logo-small.png";
+import whiteLogo from "@/assets/logo-small-white.png";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,14 +10,14 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@components/ui/navigation-menu";
-import { cn } from "@lib/utils";
-import { HandHeart } from "lucide-react";
-import { useEffect, useState } from "react";
+} from "@/components/ui/navigation-menu";
+import { useSettings } from "@/hooks/settings";
+import { cn } from "@/lib/client/utils";
 import { Button } from "../ui/button";
 
 export const NavBar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { active, toggle } = useSettings();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +44,7 @@ export const NavBar: React.FC = () => {
       <div className="3xl:fixed:px-0 px-6 flex gap-4 items-center">
         <a href="/" className="block">
           <picture className="h-full w-full">
-            <source srcset={whiteLogo} media="(prefers-color-scheme: dark)" />
+            <source srcSet={whiteLogo} media="(prefers-color-scheme: dark)" />
             <img alt="CommunityDragon" src={logo} height="32" width="32" />
           </picture>
         </a>
@@ -177,6 +178,20 @@ export const NavBar: React.FC = () => {
                     </a>
                   }
                 />
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Button
+                  variant="ghost"
+                  nativeButton={false}
+                  onClick={() => toggle(true)}
+                  size="icon"
+                  render={
+                    <span>
+                      <Menu />
+                    </span>
+                  }
+                />
+                {JSON.stringify(active)}
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>

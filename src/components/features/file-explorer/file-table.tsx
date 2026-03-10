@@ -1,5 +1,7 @@
-import { Badge } from "@components/ui/badge";
-import { Button } from "@components/ui/button";
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,12 +9,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@components/ui/table";
-import { useIndex } from "@hooks/nginx-index";
-import { getFileIcon, sortFiles } from "@lib/utils";
-import type { SortColumn, SortDirection } from "@typings/files";
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { useMemo, useState } from "react";
+} from "@/components/ui/table";
+import { useIndex } from "@/hooks/nginx-index";
+import { getFileIcon, sortFiles } from "@/lib/client/utils";
+import type { SortColumn, SortDirection } from "@/types/files";
 
 export const FileTable: React.FC = () => {
   const { files } = useIndex();

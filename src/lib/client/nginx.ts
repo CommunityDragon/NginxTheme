@@ -1,4 +1,4 @@
-import type { FileEntry, FileIndex } from "@typings/files";
+import type { FileEntry, FileIndex } from "@/types/files";
 
 /**
  * Parses a human‑readable size string (e.g. "279.2 KiB", "41.6 KiB", or "-")
@@ -70,7 +70,7 @@ export const parseDate = (dateStr: string): Date | null => {
 };
 
 /**
- * Extracts directory path and file entries from the hidden <template id="table-index">
+ * Extracts directory path and file entries from the hidden <template id="nginx-index">
  * that is rendered by the server. This function runs only on the client.
  *
  * @returns FileIndex containing the current path and parsed file entries.
@@ -81,7 +81,7 @@ export const parseTemplate = (): FileIndex => {
   }
 
   const template = document.getElementById(
-    "table-index",
+    "nginx-index",
   ) as HTMLTemplateElement;
   if (!template) {
     return { path: "", files: [] };

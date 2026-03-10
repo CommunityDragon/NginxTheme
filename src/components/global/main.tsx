@@ -1,4 +1,4 @@
-import { Separator } from "@components/ui/separator";
+import { Separator } from "@/components/ui/separator";
 import { Breadcrumbs } from "./breadcrumbs";
 import { Search } from "./search";
 

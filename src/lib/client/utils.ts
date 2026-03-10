@@ -1,4 +1,3 @@
-import type { FileEntry } from "@typings/files";
 import { type ClassValue, clsx } from "clsx";
 import {
   Binary,
@@ -14,6 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { twMerge } from "tailwind-merge";
+import type { FileEntry } from "@/types/files";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

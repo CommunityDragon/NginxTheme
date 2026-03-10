@@ -1,5 +1,5 @@
-import { type ContextValue, SearchContext } from "@contexts/search";
 import { useContext } from "react";
+import { type ContextValue, SearchContext } from "@/contexts/search";
 
 export const useSearch = (): ContextValue => {
   const context = useContext(SearchContext);

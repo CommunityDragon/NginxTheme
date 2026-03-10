@@ -1,4 +1,4 @@
-import { useSearch } from "@hooks/search";
+import { useSearch } from "@/hooks/search";
 import { FileTable } from "./file-table";
 import { SearchResultTable } from "./search-result-table";
 

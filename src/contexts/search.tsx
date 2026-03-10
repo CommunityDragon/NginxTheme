@@ -1,6 +1,6 @@
-import type { SearchMode } from "@typings/search";
 import type React from "react";
 import { createContext, useEffect, useState } from "react";
+import type { SearchMode } from "@/types/search";
 
 interface Props {
   children: React.ReactNode;

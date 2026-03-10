@@ -1,6 +1,6 @@
-import type { FileEntry } from "@typings/files";
 import type React from "react";
 import { createContext } from "react";
+import type { FileEntry } from "@/types/files";
 
 interface Props {
   children: React.ReactNode;

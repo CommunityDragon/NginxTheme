@@ -1,7 +1,7 @@
-import { FilelistDB } from "@lib/db";
-import { escapeRegex } from "@lib/utils";
-import type { SearchResult } from "@typings/search";
 import { useCallback, useRef, useState } from "react";
+import { FilelistDB } from "@/lib/client/db";
+import { escapeRegex } from "@/lib/client/utils";
+import type { SearchResult } from "@/types/search";
 import { useIndex } from "./nginx-index";
 import { useSearch } from "./search";
 
@@ -12,7 +12,7 @@ export const useFileExplorer = () => {
   const { mode, setLoading } = useSearch();
   const [results, setResults] = useState<SearchResult[]>([]);
   const [error, setError] = useState<Error | null>(null);
-  const useRegex = true;
+
   // Refs to store version and DB instance across renders
   const versionKeyRef = useRef<string | null>(null);
   const dbInstanceRef = useRef<FilelistDB | null>(null);
@@ -103,7 +103,8 @@ export const useFileExplorer = () => {
           dbInstanceRef.current = new FilelistDB(versionKey);
         }
 
-        const db = dbInstanceRef.current;
+        // biome-ignore lint/style/noNonNullAssertion: can be safely ignored since we check for null above
+        const db = dbInstanceRef.current!;
 
         // Get file list from cache or network
         let files = await db.getFileList();
@@ -120,34 +121,25 @@ export const useFileExplorer = () => {
 
         // Build regex with local prefix if in local mode
         const prefix = localPrefix();
-
-        const content = useRegex ? trimmedQuery : escapeRegex(trimmedQuery);
+        const escapedQuery = escapeRegex(trimmedQuery);
         let regex: RegExp;
         try {
-          regex = new RegExp(`^${prefix}.*?(?:${content}).*$`, "gim");
-          //const fast_regexp =new RegExp(`$\\n${prefix}[^\\n]*?${content}[^\\n]*\\n`,"gim")
-          //regex=fast_regexp;
-        }
-        catch (e) {
+          regex = new RegExp(`^${prefix}.*(?:${escapedQuery}).*$`, "mi");
+        } catch (e) {
           console.error("Invalid regex", e);
           setResults([]);
           return;
         }
-        console.log(regex);
+
+        // Perform search (worker‑based)
         const matches = await db.searchFileList(regex);
-        if (matches) {
-          setResults(
-            matches.map((filename) => ({
-              filename,
-              href: `/${currentPatch}/${filename}`,
-            })),
-          );
-        }
-        else {
-          setResults(
-            []
-          );
-        }
+        const currentPatch = getPatch();
+        setResults(
+          matches.map((filename) => ({
+            filename,
+            href: `/${currentPatch}/${filename}`,
+          })),
+        );
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return;
         setError(err instanceof Error ? err : new Error(String(err)));

@@ -1,10 +1,9 @@
-import { Button } from "@components/ui/button";
-import { ButtonGroup } from "@components/ui/button-group";
-import { Input } from "@components/ui/input";
-import { useSearch } from "@hooks/search";
 import { LoaderCircleIcon, SearchIcon } from "lucide-react";
-import type { TargetedInputEvent } from "preact";
 import { useEffect, useId, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Input } from "@/components/ui/input";
+import { useSearch } from "@/hooks/search";
 
 export const Search: React.FC = () => {
   const [search, setSearch] = useState("");
@@ -18,7 +17,7 @@ export const Search: React.FC = () => {
     if (search !== query) {
       setQuery(search);
     }
-  }, [search]);
+  }, [search, query, setQuery]);
 
   const id = useId();
 
@@ -34,9 +33,7 @@ export const Search: React.FC = () => {
           type="search"
           placeholder="Search..."
           value={search}
-          onChange={(e: TargetedInputEvent<HTMLInputElement>) =>
-            setSearch(e.currentTarget.value)
-          }
+          onChange={(e) => setSearch(e.currentTarget.value)}
           className="peer px-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
         />
         {loading && (

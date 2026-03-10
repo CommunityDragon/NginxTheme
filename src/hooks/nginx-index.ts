@@ -1,5 +1,5 @@
-import { type ContextValue, IndexContext } from "@contexts/nginx-index";
 import { useContext } from "react";
+import { type ContextValue, IndexContext } from "@/contexts/nginx-index";
 
 export const useIndex = (): ContextValue => {
   const context = useContext(IndexContext);
