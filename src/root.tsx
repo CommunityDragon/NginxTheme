@@ -28,8 +28,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <Meta />
         <Links />
-        {/** biome-ignore lint/security/noDangerouslySetInnerHtml: inline scripts */}
-        <script dangerouslySetInnerHTML={{ __html: `
+        <script
+          /** biome-ignore lint/security/noDangerouslySetInnerHtml: inline scripts */
+          dangerouslySetInnerHTML={{
+            __html: `
           (function() {
             try {
               var settingsStorageKey = '${import.meta.env.VITE_SETTINGS_STORAGE_KEY}';
@@ -54,7 +56,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               window.__INITIAL_SETTINGS__ = null;
             }
           })();
-        `}} />
+        `,
+          }}
+        />
       </head>
       <body className="group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
         {children}
