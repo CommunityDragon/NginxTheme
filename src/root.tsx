@@ -12,19 +12,6 @@ import {
 import type { Route } from "./+types/root";
 import "./style.css";
 
-export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
-];
-
 export function Layout({ children }: { children: React.ReactNode }) {
   const template = useLoaderData<typeof loader>();
 
@@ -41,6 +28,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <Meta />
         <Links />
+        {/** biome-ignore lint/security/noDangerouslySetInnerHtml: inline scripts */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function() {
+            try {
+              var settingsStorageKey = '${import.meta.env.VITE_SETTINGS_STORAGE_KEY}';
+              var themeStorageKey = '${import.meta.env.VITE_THEME_STORAGE_KEY}';
+              var themeDefault = '${import.meta.env.VITE_THEME_DEFAULT}';
+              var storedSettings = localStorage.getItem(settingsStorageKey) ?? "null";
+              var storedTheme = localStorage.getItem(themeStorageKey);
+              var theme = storedTheme || themeDefault;
+              var root = document.documentElement;
+              var appliedTheme = theme;
+              if (theme === 'system') {
+                appliedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+              }
+              root.classList.add(appliedTheme);
+              window.__INITIAL_THEME__ = theme;
+              var settings = JSON.parse(storedSettings);
+              window.__INITIAL_SETTINGS__ = settings;
+            } catch (e) {
+              var fallback = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+              document.documentElement.classList.add(fallback);
+              window.__INITIAL_THEME__ = 'system';
+              window.__INITIAL_SETTINGS__ = null;
+            }
+          })();
+        `}} />
       </head>
       <body className="group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
         {children}
