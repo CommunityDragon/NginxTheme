@@ -40,7 +40,7 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
-        source: "build/client"
+        source: "build/client/"
         target: "/srv/theme/"
         strip_components: 1
 
