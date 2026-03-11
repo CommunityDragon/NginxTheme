@@ -53,7 +53,7 @@ export const Breadcrumbs: React.FC<Props> = ({ path = "/" }) => {
     : allItems;
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className={isTooLong ? "-my-1.5" : ""}>
       <BreadcrumbList>
         {itemsToDisplay.map((item, i) => (
           <>
@@ -62,14 +62,11 @@ export const Breadcrumbs: React.FC<Props> = ({ path = "/" }) => {
               {Array.isArray(item) ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger
-                    nativeButton={false}
                     render={
-                      <span>
-                        <Button size="icon-sm" variant="ghost">
-                          <BreadcrumbEllipsis />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </span>
+                      <Button size="icon-sm" variant="ghost">
+                        <BreadcrumbEllipsis />
+                        <span className="sr-only">Toggle menu</span>
+                      </Button>
                     }
                   />
                   <DropdownMenuContent

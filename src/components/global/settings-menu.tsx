@@ -1,3 +1,4 @@
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Drawer,
   DrawerContent,
@@ -5,10 +6,26 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+} from "@/components/ui/field";
 import { useSettings } from "@/hooks/settings";
 
+interface CheckboxFieldProps {
+  target: string;
+  label: string;
+  checked: boolean;
+  update: (key: string, value: unknown) => unknown;
+}
+
 export const SettingsMenu: React.FC = () => {
-  const { active, toggle } = useSettings();
+  const { settings, update, active, toggle } = useSettings();
 
   return (
     <div>
@@ -22,30 +39,61 @@ export const SettingsMenu: React.FC = () => {
           <DrawerHeader>
             <DrawerTitle>Settings</DrawerTitle>
             <DrawerDescription>
-              Change the settings the way you like it. {JSON.stringify(active)}
+              Change the settings the way you like it.
             </DrawerDescription>
           </DrawerHeader>
           <div className="no-scrollbar overflow-y-auto px-4">
-            {Array.from({ length: 10 }).map((_, index) => (
-              <p
-                // biome-ignore lint/suspicious/noArrayIndexKey: @todo replace with real content and proper keys
-                key={index}
-                className="mb-4 leading-normal style-lyra:mb-2 style-lyra:leading-relaxed"
-              >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-            ))}
+            <FieldSeparator />
+            <br />
+            <FieldGroup>
+              <FieldSet>
+                <FieldLegend variant="label">Visual</FieldLegend>
+                <FieldDescription>
+                  Personalise visual elements on the website. Make the website
+                  your own ❤️
+                </FieldDescription>
+                <FieldGroup>
+                  <CheckboxField
+                    target="visual.show_hero"
+                    label="Show hero section"
+                    checked={settings.visual.show_hero}
+                    update={update}
+                  />
+
+                  <CheckboxField
+                    target="visual.show_background"
+                    label="Show background image"
+                    checked={settings.visual.show_background}
+                    update={update}
+                  />
+                </FieldGroup>
+              </FieldSet>
+            </FieldGroup>
           </div>
         </DrawerContent>
       </Drawer>
     </div>
   );
 };
+
+const CheckboxField: React.FC<CheckboxFieldProps> = ({
+  target,
+  label,
+  checked,
+  update,
+}) => (
+  <Field orientation="horizontal">
+    <Checkbox
+      id={target.replaceAll(".", "-")}
+      checked={checked}
+      onCheckedChange={(checked) => {
+        update(target, checked);
+      }}
+    />
+    <FieldLabel htmlFor={target.replaceAll(".", "-")} className="font-normal">
+      {label}
+    </FieldLabel>
+  </Field>
+);
 
 export default SettingsMenu;

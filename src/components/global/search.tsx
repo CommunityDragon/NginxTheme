@@ -4,10 +4,13 @@ import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Input } from "@/components/ui/input";
 import { useSearch } from "@/hooks/search";
+import { useSettings } from "@/hooks/settings";
+import { cn } from "@/lib/client/utils";
 
 export const Search: React.FC = () => {
   const [search, setSearch] = useState("");
   const { query, loading, mode, setQuery, setMode } = useSearch();
+  const { settings } = useSettings();
 
   useEffect(() => {
     setSearch(query);
@@ -22,7 +25,12 @@ export const Search: React.FC = () => {
   const id = useId();
 
   return (
-    <div className="w-full flex gap-2">
+    <div
+      className={cn(
+        "w-full flex gap-2",
+        settings.visual.show_hero ? "" : "mt-0.25",
+      )}
+    >
       <div className="relative grow">
         <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
           <SearchIcon className="size-4" />
@@ -47,7 +55,7 @@ export const Search: React.FC = () => {
         <ButtonGroup>
           <Button
             style={{
-              height: `calc(var(--spacing) * 9 + ${mode === "local" ? "2px" : "0px"})`,
+              height: `calc(var(--spacing) * ${settings.visual.show_hero ? "9" : "8.75"} + ${mode === "local" ? "2px" : "0px"})`,
               marginTop: mode === "local" ? "-1px" : "0",
             }}
             variant={mode === "local" ? "secondary" : "outline"}
@@ -56,8 +64,9 @@ export const Search: React.FC = () => {
             Local
           </Button>
           <Button
+            size={settings.visual.show_hero ? "default" : "sm"}
             style={{
-              height: `calc(var(--spacing) * 9 + ${mode === "global" ? "2px" : "0px"})`,
+              height: `calc(var(--spacing) * ${settings.visual.show_hero ? "9" : "8.75"} + ${mode === "global" ? "2px" : "0px"})`,
               marginTop: mode === "global" ? "-1px" : "0",
             }}
             variant={mode === "global" ? "secondary" : "outline"}

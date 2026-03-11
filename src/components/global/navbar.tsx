@@ -11,17 +11,21 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { Separator } from "@/components/ui/separator";
 import { useSettings } from "@/hooks/settings";
 import { cn } from "@/lib/client/utils";
 import { Button } from "../ui/button";
+import { Search } from "./search";
 
 export const NavBar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { active, toggle } = useSettings();
+  const { settings, toggle } = useSettings();
 
   useEffect(() => {
+    if (!settings.visual.show_hero) return;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 160);
     };
 
     handleScroll();
@@ -30,15 +34,16 @@ export const NavBar: React.FC = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [settings.visual.show_hero]);
 
   return (
     <header
       className={cn(
-        "fixed top-0 z-50 w-full transition-colors duration-200",
-        isScrolled
-          ? "border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80"
+        "top-0 z-50 w-full transition-colors duration-200",
+        isScrolled || !settings.visual.show_hero
+          ? "bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80"
           : "bg-transparent",
+        settings.visual.show_hero ? "fixed" : "sticky",
       )}
     >
       <div className="3xl:fixed:px-0 px-6 flex gap-4 items-center">
@@ -168,6 +173,20 @@ export const NavBar: React.FC = () => {
 
           <NavigationMenu>
             <NavigationMenuList>
+              <NavigationMenuItem
+                className={
+                  isScrolled || !settings.visual.show_hero ? "" : "hidden"
+                }
+              >
+                <Search />
+              </NavigationMenuItem>
+              <NavigationMenuItem
+                className={
+                  isScrolled || !settings.visual.show_hero ? "" : "hidden"
+                }
+              >
+                <Separator orientation="vertical" className="h-6 mx-4" />
+              </NavigationMenuItem>
               <NavigationMenuItem>
                 <Button
                   variant="destructive"
@@ -179,19 +198,14 @@ export const NavBar: React.FC = () => {
                   }
                 />
               </NavigationMenuItem>
-              <NavigationMenuItem>
+              <NavigationMenuItem className="ml-2">
                 <Button
                   variant="ghost"
-                  nativeButton={false}
                   onClick={() => toggle(true)}
                   size="icon"
-                  render={
-                    <span>
-                      <Menu />
-                    </span>
-                  }
-                />
-                {JSON.stringify(active)}
+                >
+                  <Menu />
+                </Button>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
