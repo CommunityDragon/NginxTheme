@@ -28,7 +28,7 @@ export const Search: React.FC = () => {
     <div
       className={cn(
         "w-full flex gap-2",
-        settings.visual.show_hero ? "" : "mt-0.25",
+        settings.visual.show_hero ? "" : "mt-0.25 -mb-0.25",
       )}
     >
       <div className="relative grow">
