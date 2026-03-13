@@ -1,6 +1,5 @@
 import { AppWindowIcon, CodeIcon } from "lucide-react";
-import React, { Suspense } from "react";
-import { FileExplorer } from "@/components/features/file-explorer/file-explorer";
+import { FileExplorer } from "@/components/features/file-explorer";
 import { Hero } from "@/components/global/hero";
 import { Main } from "@/components/global/main";
 import { NavBar } from "@/components/global/navbar";
@@ -11,10 +10,7 @@ import { SearchProvider } from "@/contexts/search";
 import { SettingsProvider } from "@/contexts/settings";
 import { ThemeProvider } from "@/contexts/theme";
 import { parseTemplate } from "@/lib/client/nginx";
-
-const SettingsMenu = React.lazy(
-  () => import("./components/global/settings-menu"),
-);
+import { Settings } from "./components/global/settings";
 
 const App: React.FC = () => {
   const { path, files } = parseTemplate();
@@ -24,9 +20,7 @@ const App: React.FC = () => {
       <SettingsProvider>
         <ThemeProvider storageKey={import.meta.env.VITE_THEME_STORAGE_KEY}>
           <SearchProvider debounceMs={500} initialMode="local">
-            <Suspense>
-              <SettingsMenu />
-            </Suspense>
+            <Settings />
             <NavBar />
             <Hero />
             <Main path={path}>

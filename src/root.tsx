@@ -31,7 +31,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <script
           /** biome-ignore lint/security/noDangerouslySetInnerHtml: inline scripts */
           dangerouslySetInnerHTML={{
-            __html: `
+            __html: /* js */ `
           (function() {
             try {
               var settingsStorageKey = '${import.meta.env.VITE_SETTINGS_STORAGE_KEY}';

@@ -17,10 +17,8 @@ export const Search: React.FC = () => {
   }, [query]);
 
   useEffect(() => {
-    if (search !== query) {
-      setQuery(search);
-    }
-  }, [search, query, setQuery]);
+    setQuery(search);
+  }, [search, setQuery]);
 
   const id = useId();
 

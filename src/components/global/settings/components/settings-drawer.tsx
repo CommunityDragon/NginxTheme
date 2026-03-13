@@ -24,7 +24,7 @@ interface CheckboxFieldProps {
   update: (key: string, value: unknown) => unknown;
 }
 
-export const SettingsMenu: React.FC = () => {
+export const SettingsDrawer: React.FC = () => {
   const { settings, update, active, toggle } = useSettings();
 
   return (
@@ -95,5 +95,3 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
     </FieldLabel>
   </Field>
 );
-
-export default SettingsMenu;
