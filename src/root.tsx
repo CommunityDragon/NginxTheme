@@ -32,6 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           // biome-ignore lint/security/noDangerouslySetInnerHtml: inline scripts
           dangerouslySetInnerHTML={{ __html: script }}
         />
+        <Scripts />
       </head>
       <body className="group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
         {children}
@@ -41,7 +42,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           dangerouslySetInnerHTML={{ __html: template }}
         />
         <ScrollRestoration />
-        <Scripts />
       </body>
     </html>
   );
