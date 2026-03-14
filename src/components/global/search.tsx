@@ -1,5 +1,6 @@
 import { LoaderCircleIcon, SearchIcon } from "lucide-react";
 import { useEffect, useId, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,7 @@ import { cn } from "@/lib/client/utils";
 
 export const Search: React.FC = () => {
   const [search, setSearch] = useState("");
+  const { t } = useTranslation();
   const { query, loading, mode, setQuery, setMode } = useSearch();
   const { settings } = useSettings();
 
@@ -32,12 +34,12 @@ export const Search: React.FC = () => {
       <div className="relative grow">
         <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
           <SearchIcon className="size-4" />
-          <span className="sr-only">Search</span>
+          <span className="sr-only">{t("search.label")}</span>
         </div>
         <Input
           id={id}
           type="search"
-          placeholder="Search..."
+          placeholder={t("search.placeholder")}
           value={search}
           onChange={(e) => setSearch(e.currentTarget.value)}
           className="peer px-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
@@ -45,7 +47,7 @@ export const Search: React.FC = () => {
         {loading && (
           <div className="text-muted-foreground pointer-events-none absolute inset-y-0 right-0 flex items-center justify-center pr-3 peer-disabled:opacity-50">
             <LoaderCircleIcon className="size-4 animate-spin" />
-            <span className="sr-only">Loading...</span>
+            <span className="sr-only">{t("search.loading")}</span>
           </div>
         )}
       </div>
@@ -59,7 +61,7 @@ export const Search: React.FC = () => {
             variant={mode === "local" ? "secondary" : "outline"}
             onClick={() => setMode("local")}
           >
-            Local
+            {t("search.local")}
           </Button>
           <Button
             size={settings.visual.show_hero ? "default" : "sm"}
@@ -70,7 +72,7 @@ export const Search: React.FC = () => {
             variant={mode === "global" ? "secondary" : "outline"}
             onClick={() => setMode("global")}
           >
-            Global
+            {t("search.global")}
           </Button>
         </ButtonGroup>
       </div>

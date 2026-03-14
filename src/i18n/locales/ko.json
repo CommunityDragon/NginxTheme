@@ -1,0 +1,125 @@
+{
+  "common": {
+    "title": "CDragon Nginx 테마",
+    "description": "League of Legends 게임 파일 탐색 및 관리"
+  },
+  "hero": {
+    "title": "데이터 수집 중",
+    "subtitle": "2017년부터 Riot Games"
+  },
+  "navbar": {
+    "home": "홈",
+    "projects": "프로젝트",
+    "links": "링크",
+    "projectsMenu": {
+      "raw": {
+        "title": "RAW",
+        "description": "League of Legends LCU 및 게임 클라이언트에서 추출한 모든 원본 에셋"
+      },
+      "cdn": {
+        "title": "CDN",
+        "description": "Riot 에셋에 대한 액세스를 단순화하는 정적 데이터를 제공하는 사용자 정의 CDN"
+      },
+      "universe": {
+        "title": "Universe",
+        "description": "Riot의 .bin 파일을 찾고, 보고, 해독하기 위한 도구"
+      },
+      "binViewer": {
+        "title": ".BIN 뷰어",
+        "description": "Riot의 .bin 파일을 찾고, 보고, 해독하기 위한 도구"
+      },
+      "cdtb": {
+        "title": "CDTB",
+        "description": "게임 파일로 작업하고 Riot Games에서 파일을 내보내기 위한 도구 모음"
+      },
+      "hashes": {
+        "title": "Hashes",
+        "description": "Riot Games의 알려진 모든 파일 해시를 포함하는 저장소"
+      }
+    },
+    "linksMenu": {
+      "awesomeList": {
+        "title": "멋진 목록",
+        "description": "League of Legends API와 함께 작동하는 것들의 목록"
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "모든 저장소와 도구를 포함하는 우리의 GitHub 페이지"
+      },
+      "docs": {
+        "title": "문서",
+        "description": "Riot의 게임 데이터 및 관련 도구에 대한 문서"
+      },
+      "blog": {
+        "title": "블로그",
+        "description": "CommunityDragon 업데이트에 관한 우리의 블로그 페이지"
+      },
+      "discord": {
+        "title": "Discord",
+        "description": "우리 커뮤니티의 Discord 그룹. 토론과 질문을 위해 자유롭게 참여하세요"
+      },
+      "patreon": {
+        "title": "Patreon",
+        "description": "우리를 지원하고 싶은 경우 우리의 Patreon. 모든 도움이 감사합니다 ❤️"
+      }
+    },
+    "supportUs": "지원하기"
+  },
+  "search": {
+    "placeholder": "검색...",
+    "label": "검색",
+    "loading": "로딩 중...",
+    "local": "로컬",
+    "global": "전역"
+  },
+  "breadcrumbs": {
+    "toggleMenu": "메뉴 전환",
+    "more": "더보기"
+  },
+  "fileExplorer": {
+    "name": "이름",
+    "size": "크기",
+    "modified": "수정됨",
+    "emptySize": "-",
+    "processing": "파일 항목 처리 중",
+    "searching": "파일 항목을 검색 중입니다. 잠시만 기다려주세요...",
+    "noResults": "결과를 찾을 수 없습니다."
+  },
+  "binViewer": {
+    "title": ".BIN 뷰어",
+    "description": "League of Legends의 .BIN 파일을 보고 분석합니다."
+  },
+  "tabs": {
+    "fileExplorer": "파일 탐색기",
+    "binViewer": ".BIN 뷰어"
+  },
+  "settings": {
+    "title": "설정",
+    "description": "원하는 대로 설정을 변경하세요.",
+    "visual": {
+      "title": "시각",
+      "description": "웹사이트의 시각 요소를 개인화하세요. 웹사이트를 자신의 것으로 만드세요 ❤️",
+      "showHero": "영웅 섹션 표시",
+      "showBackground": "배경 이미지 표시"
+    },
+    "language": {
+      "title": "언어",
+      "description": "원하는 언어를 선택하세요",
+      "en": "English",
+      "es": "Español",
+      "nl": "Nederlands",
+      "zh": "中文",
+      "de": "Deutsch",
+      "fr": "Français",
+      "ko": "한국어"
+    }
+  },
+  "accessibility": {
+    "loading": "로딩 중",
+    "breadcrumb": "브레드크럼",
+    "communityDragonLogo": "CommunityDragon"
+  },
+  "errors": {
+    "prefix": "오류:"
+  }
+}

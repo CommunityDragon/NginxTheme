@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,7 @@ import { getFileIcon, sortFiles } from "@/lib/client/utils";
 import type { SortColumn, SortDirection } from "@/types/files";
 
 export const FileTable: React.FC = () => {
+  const { t } = useTranslation();
   const { files } = useIndex();
   const [sortColumn, setSortColumn] = useState<SortColumn | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
@@ -38,7 +40,7 @@ export const FileTable: React.FC = () => {
   };
 
   const formatDate = (date: Date | null) => {
-    if (!date) return "-";
+    if (!date) return t("fileExplorer.emptySize");
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
@@ -67,7 +69,7 @@ export const FileTable: React.FC = () => {
                 size="sm"
                 onClick={() => toggleSort("name")}
               >
-                Name
+                {t("fileExplorer.name")}
                 <SortIcon column="name" />
               </Button>
             </TableHead>
@@ -78,7 +80,7 @@ export const FileTable: React.FC = () => {
                 size="sm"
                 onClick={() => toggleSort("size")}
               >
-                Size
+                {t("fileExplorer.size")}
                 <SortIcon column="size" />
               </Button>
             </TableHead>
@@ -89,7 +91,7 @@ export const FileTable: React.FC = () => {
                 size="sm"
                 onClick={() => toggleSort("date")}
               >
-                Modified
+                {t("fileExplorer.modified")}
                 <SortIcon column="date" />
               </Button>
             </TableHead>

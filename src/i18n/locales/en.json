@@ -1,0 +1,124 @@
+{
+  "common": {
+    "title": "CDragon Nginx Theme",
+    "description": "Browse and manage League of Legends game files"
+  },
+  "hero": {
+    "title": "Hoarding data from",
+    "subtitle": "Riot Games since 2017"
+  },
+  "navbar": {
+    "home": "Home",
+    "projects": "Projects",
+    "links": "Links",
+    "projectsMenu": {
+      "raw": {
+        "title": "RAW",
+        "description": "All raw assets extracted from League of Legends LCU and game client"
+      },
+      "cdn": {
+        "title": "CDN",
+        "description": "A custom CDN to serve static data simplifying accessing Riot's assets"
+      },
+      "universe": {
+        "title": "Universe",
+        "description": "A tool to find, view, and decrypt Riot's .bin files"
+      },
+      "binViewer": {
+        "title": ".BIN Viewer",
+        "description": "A tool to find, view, and decrypt Riot's .bin files"
+      },
+      "cdtb": {
+        "title": "CDTB",
+        "description": "A toolbox to work with game files and export files from Riot Games"
+      },
+      "hashes": {
+        "title": "Hashes",
+        "description": "A repository containing all known file hashes from Riot Games"
+      }
+    },
+    "linksMenu": {
+      "awesomeList": {
+        "title": "Awesome List",
+        "description": "A list of things that work with the League of Legends APIs"
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "Our GitHub page containing all our repo's and tools"
+      },
+      "docs": {
+        "title": "Docs",
+        "description": "Documentation surrounding the Riot's game data and related tools"
+      },
+      "blog": {
+        "title": "Blog",
+        "description": "Our blog page regarding updates to CommunityDragon"
+      },
+      "discord": {
+        "title": "Discord",
+        "description": "Our Community's Discord group. Feel free to join for discussions and questions"
+      },
+      "patreon": {
+        "title": "Patreon",
+        "description": "Our Patreon in case you want to support us. Any help is appreciated ❤️"
+      }
+    },
+    "supportUs": "Support us"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "label": "Search",
+    "loading": "Loading...",
+    "local": "Local",
+    "global": "Global"
+  },
+  "breadcrumbs": {
+    "toggleMenu": "Toggle menu",
+    "more": "More"
+  },
+  "fileExplorer": {
+    "name": "Name",
+    "size": "Size",
+    "modified": "Modified",
+    "processing": "Processing file entries",
+    "searching": "Searching through file entries, please wait...",
+    "noResults": "No results found."
+  },
+  "binViewer": {
+    "title": ".BIN Viewer",
+    "description": "View and analyze .BIN files from League of Legends."
+  },
+  "tabs": {
+    "fileExplorer": "File Explorer",
+    "binViewer": ".BIN Viewer"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Change the settings the way you like it.",
+    "visual": {
+      "title": "Visual",
+      "description": "Personalise visual elements on the website. Make the website your own ❤️",
+      "showHero": "Show hero section",
+      "showBackground": "Show background image"
+    },
+    "language": {
+      "title": "Language",
+      "description": "Select your preferred language",
+      "en": "English",
+      "es": "Español",
+      "nl": "Nederlands",
+      "zh": "中文",
+      "de": "Deutsch",
+      "fr": "Français",
+      "ko": "한국어"
+    }
+  },
+  "accessibility": {
+    "loading": "Loading",
+    "breadcrumb": "breadcrumb",
+    "communityDragonLogo": "CommunityDragon"
+  },
+  "errors": {
+    "prefix": "Error:"
+  }
+}

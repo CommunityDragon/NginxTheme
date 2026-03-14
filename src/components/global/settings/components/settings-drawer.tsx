@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Drawer,
@@ -25,6 +26,7 @@ interface CheckboxFieldProps {
 }
 
 export const SettingsDrawer: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { settings, update, active, toggle } = useSettings();
 
   return (
@@ -37,35 +39,64 @@ export const SettingsDrawer: React.FC = () => {
       >
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>Settings</DrawerTitle>
-            <DrawerDescription>
-              Change the settings the way you like it.
-            </DrawerDescription>
+            <DrawerTitle>{t("settings.title")}</DrawerTitle>
+            <DrawerDescription>{t("settings.description")}</DrawerDescription>
           </DrawerHeader>
           <div className="no-scrollbar overflow-y-auto px-4">
             <FieldSeparator />
             <br />
             <FieldGroup>
               <FieldSet>
-                <FieldLegend variant="label">Visual</FieldLegend>
+                <FieldLegend variant="label">
+                  {t("settings.visual.title")}
+                </FieldLegend>
                 <FieldDescription>
-                  Personalise visual elements on the website. Make the website
-                  your own ❤️
+                  {t("settings.visual.description")}
                 </FieldDescription>
                 <FieldGroup>
                   <CheckboxField
                     target="visual.show_hero"
-                    label="Show hero section"
+                    label={t("settings.visual.showHero")}
                     checked={settings.visual.show_hero}
                     update={update}
                   />
 
                   <CheckboxField
                     target="visual.show_background"
-                    label="Show background image"
+                    label={t("settings.visual.showBackground")}
                     checked={settings.visual.show_background}
                     update={update}
                   />
+                </FieldGroup>
+              </FieldSet>
+            </FieldGroup>
+            <br />
+            <FieldSeparator />
+            <br />
+            <FieldGroup>
+              <FieldSet>
+                <FieldLegend variant="label">
+                  {t("settings.language.title")}
+                </FieldLegend>
+                <FieldDescription>
+                  {t("settings.language.description")}
+                </FieldDescription>
+                <FieldGroup>
+                  <Field orientation="vertical" className="gap-2">
+                    <select
+                      value={i18n.language}
+                      onChange={(e) => i18n.changeLanguage(e.target.value)}
+                      className="px-3 py-2 border border-input rounded-md bg-background text-foreground"
+                    >
+                      <option value="en">{t("settings.language.en")}</option>
+                      <option value="es">{t("settings.language.es")}</option>
+                      <option value="nl">{t("settings.language.nl")}</option>
+                      <option value="zh">{t("settings.language.zh")}</option>
+                      <option value="de">{t("settings.language.de")}</option>
+                      <option value="fr">{t("settings.language.fr")}</option>
+                      <option value="ko">{t("settings.language.ko")}</option>
+                    </select>
+                  </Field>
                 </FieldGroup>
               </FieldSet>
             </FieldGroup>

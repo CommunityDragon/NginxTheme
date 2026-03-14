@@ -13,7 +13,7 @@ import type { Route } from "./+types/root";
 import "./style.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const template = useLoaderData<typeof loader>();
+  const { template, script } = useLoaderData<typeof loader>();
 
   return (
     <html lang="en">
@@ -29,35 +29,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         <script
-          /** biome-ignore lint/security/noDangerouslySetInnerHtml: inline scripts */
-          dangerouslySetInnerHTML={{
-            __html: /* js */ `
-          (function() {
-            try {
-              var settingsStorageKey = '${import.meta.env.VITE_SETTINGS_STORAGE_KEY}';
-              var themeStorageKey = '${import.meta.env.VITE_THEME_STORAGE_KEY}';
-              var themeDefault = '${import.meta.env.VITE_THEME_DEFAULT}';
-              var storedSettings = localStorage.getItem(settingsStorageKey) ?? "null";
-              var storedTheme = localStorage.getItem(themeStorageKey);
-              var theme = storedTheme || themeDefault;
-              var root = document.documentElement;
-              var appliedTheme = theme;
-              if (theme === 'system') {
-                appliedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-              }
-              root.classList.add(appliedTheme);
-              window.__INITIAL_THEME__ = theme;
-              var settings = JSON.parse(storedSettings);
-              window.__INITIAL_SETTINGS__ = settings;
-            } catch (e) {
-              var fallback = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-              document.documentElement.classList.add(fallback);
-              window.__INITIAL_THEME__ = 'system';
-              window.__INITIAL_SETTINGS__ = null;
-            }
-          })();
-        `,
-          }}
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: inline scripts
+          dangerouslySetInnerHTML={{ __html: script }}
         />
       </head>
       <body className="group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
@@ -107,27 +80,29 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   );
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  if (request.method !== "GET") return "";
+export async function loader({ request }: LoaderFunctionArgs): Promise<{
+  template: string;
+  script: string;
+}> {
+  const [{ generateTemplate }, { getLocales }, { headerScript }] =
+    await Promise.all([
+      import("@/lib/server/nginx"),
+      import("@/lib/server/lang"),
+      import("@/lib/server/header"),
+    ]);
 
-  const url = new URL(request.url);
-  const pathname = url.pathname;
+  const locales = await getLocales();
 
-  if (!pathname.endsWith("/")) {
-    return "";
-  }
+  const [template, script] = await Promise.all([
+    generateTemplate(request),
+    headerScript({
+      THEME_DEFAULT: import.meta.env.VITE_THEME_DEFAULT,
+      THEME_STORAGE_KEY: import.meta.env.VITE_THEME_STORAGE_KEY,
+      LOCALE_OPTIONS: locales,
+      LOCALE_STORAGE_KEY: import.meta.env.VITE_LOCALE_STORAGE_KEY,
+      SETTINGS_STORAGE_KEY: import.meta.env.VITE_SETTINGS_STORAGE_KEY,
+    }),
+  ]);
 
-  const targetUrl = `https://raw.communitydragon.org/json${pathname}`;
-
-  try {
-    const response = await fetch(targetUrl);
-    if (response.status !== 200) return "";
-
-    const entries = await response.json();
-    const { generateIndex } = await import("@/lib/server/nginx");
-    return generateIndex(entries, pathname);
-  } catch (err) {
-    console.error("RAW asset error:", err);
-    return "";
-  }
+  return { template, script };
 }

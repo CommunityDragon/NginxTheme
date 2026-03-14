@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
 import { useSearch } from "@/hooks/search";
 import { FileTable } from "./file-table";
 import { SearchResultTable } from "./search-result-table";
-import { useEffect, useState } from "react";
 
 export const FileExplorer: React.FC = () => {
   const { query } = useSearch();
@@ -20,5 +20,5 @@ export const FileExplorer: React.FC = () => {
         <SearchResultTable />
       </div>
     </>
-  )
+  );
 };

@@ -1,0 +1,125 @@
+{
+  "common": {
+    "title": "CDragon Nginx 主题",
+    "description": "浏览和管理英雄联盟游戏文件"
+  },
+  "hero": {
+    "title": "从以下公司收集数据",
+    "subtitle": "Riot Games 自 2017 年起"
+  },
+  "navbar": {
+    "home": "主页",
+    "projects": "项目",
+    "links": "链接",
+    "projectsMenu": {
+      "raw": {
+        "title": "RAW",
+        "description": "从英雄联盟 LCU 和游戏客户端中提取的所有原始资产"
+      },
+      "cdn": {
+        "title": "CDN",
+        "description": "用于提供静态数据的自定义 CDN，简化对 Riot 资产的访问"
+      },
+      "universe": {
+        "title": "Universe",
+        "description": "用于查找、查看和解密 Riot .bin 文件的工具"
+      },
+      "binViewer": {
+        "title": ".BIN 查看器",
+        "description": "用于查找、查看和解密 Riot .bin 文件的工具"
+      },
+      "cdtb": {
+        "title": "CDTB",
+        "description": "用于处理游戏文件和从 Riot Games 导出文件的工具箱"
+      },
+      "hashes": {
+        "title": "Hashes",
+        "description": "包含所有已知 Riot Games 文件哈希的存储库"
+      }
+    },
+    "linksMenu": {
+      "awesomeList": {
+        "title": "精选列表",
+        "description": "适用于英雄联盟 API 的工具列表"
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "我们的 GitHub 页面，包含所有存储库和工具"
+      },
+      "docs": {
+        "title": "文档",
+        "description": "关于 Riot 游戏数据和相关工具的文档"
+      },
+      "blog": {
+        "title": "博客",
+        "description": "我们关于 CommunityDragon 更新的博客页面"
+      },
+      "discord": {
+        "title": "Discord",
+        "description": "我们社区的 Discord 群组。欢迎加入进行讨论和提问"
+      },
+      "patreon": {
+        "title": "Patreon",
+        "description": "我们的 Patreon，如果您想支持我们。任何帮助都很感激 ❤️"
+      }
+    },
+    "supportUs": "支持我们"
+  },
+  "search": {
+    "placeholder": "搜索...",
+    "label": "搜索",
+    "loading": "加载中...",
+    "local": "本地",
+    "global": "全局"
+  },
+  "breadcrumbs": {
+    "toggleMenu": "切换菜单",
+    "more": "更多"
+  },
+  "fileExplorer": {
+    "name": "名称",
+    "size": "大小",
+    "modified": "修改时间",
+    "emptySize": "-",
+    "processing": "正在处理文件条目",
+    "searching": "正在搜索文件条目，请稍候...",
+    "noResults": "未找到结果。"
+  },
+  "binViewer": {
+    "title": ".BIN 查看器",
+    "description": "查看和分析英雄联盟的 .BIN 文件。"
+  },
+  "tabs": {
+    "fileExplorer": "文件浏览器",
+    "binViewer": ".BIN 查看器"
+  },
+  "settings": {
+    "title": "设置",
+    "description": "按照您的喜好更改设置。",
+    "visual": {
+      "title": "视觉",
+      "description": "个性化网站上的视觉元素。让网站成为您自己的 ❤️",
+      "showHero": "显示英雄部分",
+      "showBackground": "显示背景图像"
+    },
+    "language": {
+      "title": "语言",
+      "description": "选择您的首选语言",
+      "en": "English",
+      "es": "Español",
+      "nl": "Nederlands",
+      "zh": "中文",
+      "de": "Deutsch",
+      "fr": "Français",
+      "ko": "한국어"
+    }
+  },
+  "accessibility": {
+    "loading": "加载中",
+    "breadcrumb": "面包屑",
+    "communityDragonLogo": "CommunityDragon"
+  },
+  "errors": {
+    "prefix": "错误："
+  }
+}

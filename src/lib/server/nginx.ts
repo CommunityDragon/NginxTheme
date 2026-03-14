@@ -57,7 +57,7 @@ function formatDate(mtime: string): string {
  * @param currentPath - The path being listed (e.g., "/some/dir/").
  * @returns HTML string to be inserted into the template.
  */
-export function generateIndex(entries: Entry[], currentPath: string): string {
+function generateIndex(entries: Entry[], currentPath: string): string {
   let displayPath = currentPath;
   if (!displayPath.endsWith("/")) displayPath += "/";
   if (displayPath === "/") displayPath = "/";
@@ -107,4 +107,34 @@ export function generateIndex(entries: Entry[], currentPath: string): string {
   `;
 
   return header + table;
+}
+
+/**
+ * Generates the nginx index template based on the requested path.
+ *
+ * @param request the request object
+ * @returns the nginx index template
+ */
+export async function generateTemplate(request: Request): Promise<string> {
+  if (request.method !== "GET") return "";
+
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+
+  if (!pathname.endsWith("/")) return "";
+
+  const targetUrl = `https://raw.communitydragon.org/json${pathname}`;
+
+  try {
+    const response = await fetch(targetUrl);
+    if (response.status !== 200) return "";
+
+    const entries = await response.json();
+    const template = generateIndex(entries, pathname);
+
+    return template;
+  } catch (err) {
+    console.error("RAW asset error:", err);
+    return "";
+  }
 }

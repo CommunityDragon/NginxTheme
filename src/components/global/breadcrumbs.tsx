@@ -1,4 +1,5 @@
 import { Home } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -26,6 +27,7 @@ type crumb = {
 };
 
 export const Breadcrumbs: React.FC<Props> = ({ path = "/" }) => {
+  const { t } = useTranslation();
   const segments = path.split("/").filter((segment) => segment !== "");
 
   const breadcrumbs: crumb[] = segments.map((segment, index) => {
@@ -65,7 +67,9 @@ export const Breadcrumbs: React.FC<Props> = ({ path = "/" }) => {
                     render={
                       <Button size="icon-sm" variant="ghost">
                         <BreadcrumbEllipsis />
-                        <span className="sr-only">Toggle menu</span>
+                        <span className="sr-only">
+                          {t("breadcrumbs.toggleMenu")}
+                        </span>
                       </Button>
                     }
                   />

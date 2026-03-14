@@ -1,5 +1,6 @@
 import { HandHeart, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import logo from "@/assets/logo-small.png";
 import whiteLogo from "@/assets/logo-small-white.png";
 import {
@@ -19,6 +20,7 @@ import { Search } from "./search";
 
 export const NavBar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { t } = useTranslation();
   const { settings, toggle } = useSettings();
 
   useEffect(() => {
@@ -50,7 +52,12 @@ export const NavBar: React.FC = () => {
         <a href="/" className="block">
           <picture className="h-full w-full">
             <source srcSet={whiteLogo} media="(prefers-color-scheme: dark)" />
-            <img alt="CommunityDragon" src={logo} height="32" width="32" />
+            <img
+              alt={t("accessibility.communityDragonLogo")}
+              src={logo}
+              height="32"
+              width="32"
+            />
           </picture>
         </a>
 
@@ -64,55 +71,51 @@ export const NavBar: React.FC = () => {
                       navigationMenuTriggerStyle(),
                       "bg-transparent",
                     )}
-                    render={<a href="/">Home</a>}
+                    render={<a href="/">{t("navbar.home")}</a>}
                   />
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent">
-                    Projects
+                    {t("navbar.projects")}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       <ListItem
                         href="https://raw.communitydragon.org"
-                        title="RAW"
+                        title={t("navbar.projectsMenu.raw.title")}
                       >
-                        All raw assets extracted from League of Legends LCU and
-                        game client
+                        {t("navbar.projectsMenu.raw.description")}
                       </ListItem>
                       <ListItem
                         href="https://cdn.communitydragon.org"
-                        title="CDN"
+                        title={t("navbar.projectsMenu.cdn.title")}
                       >
-                        A custom CDN to serve static data simplifying accessing
-                        Riot's assets
+                        {t("navbar.projectsMenu.cdn.description")}
                       </ListItem>
                       <ListItem
                         href="https://universe.communitydragon.org/events"
-                        title="Universe"
+                        title={t("navbar.projectsMenu.universe.title")}
                       >
-                        A tool to find, view, and decrypt Riot's .bin files
+                        {t("navbar.projectsMenu.universe.description")}
                       </ListItem>
                       <ListItem
                         href="https://raw.communitydragon.org/binviewer/"
-                        title=".BIN Viewer"
+                        title={t("navbar.projectsMenu.binViewer.title")}
                       >
-                        A tool to find, view, and decrypt Riot's .bin files
+                        {t("navbar.projectsMenu.binViewer.description")}
                       </ListItem>
                       <ListItem
                         href="https://pypi.org/project/cdtb"
-                        title="CDTB"
+                        title={t("navbar.projectsMenu.cdtb.title")}
                       >
-                        A toolbox to work with game files and export files from
-                        Riot Games
+                        {t("navbar.projectsMenu.cdtb.description")}
                       </ListItem>
                       <ListItem
                         href="https://github.com/CommunityDragon/Data"
-                        title="Hashes"
+                        title={t("navbar.projectsMenu.hashes.title")}
                       >
-                        A repository containing all known file hashes from Riot
-                        Games
+                        {t("navbar.projectsMenu.hashes.description")}
                       </ListItem>
                     </ul>
                   </NavigationMenuContent>
@@ -120,49 +123,45 @@ export const NavBar: React.FC = () => {
 
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent">
-                    Links
+                    {t("navbar.links")}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       <ListItem
                         href="https://github.com/CommunityDragon/awesome-league"
-                        title="Awesome List"
+                        title={t("navbar.linksMenu.awesomeList.title")}
                       >
-                        A list of things that work with the League of Legends
-                        APIs
+                        {t("navbar.linksMenu.awesomeList.description")}
                       </ListItem>
                       <ListItem
                         href="https://github.com/CommunityDragon"
-                        title="GitHub"
+                        title={t("navbar.linksMenu.github.title")}
                       >
-                        Our GitHub page containing all our repo's and tools
+                        {t("navbar.linksMenu.github.description")}
                       </ListItem>
                       <ListItem
                         href="https://github.com/CommunityDragon/Docs"
-                        title="Docs"
+                        title={t("navbar.linksMenu.docs.title")}
                       >
-                        Documentation surrounding the Riot's game data and
-                        related tools
+                        {t("navbar.linksMenu.docs.description")}
                       </ListItem>
                       <ListItem
                         href="https://www.communitydragon.org/blog"
-                        title="Blog"
+                        title={t("navbar.linksMenu.blog.title")}
                       >
-                        Our blog page regarding updates to CommunityDragon
+                        {t("navbar.linksMenu.blog.description")}
                       </ListItem>
                       <ListItem
                         href="https://discord.gg/rZQwuek"
-                        title="Discord"
+                        title={t("navbar.linksMenu.discord.title")}
                       >
-                        Our Community's Discord group. Feel free to join for
-                        discussions and questions
+                        {t("navbar.linksMenu.discord.description")}
                       </ListItem>
                       <ListItem
                         href="https://www.patreon.com/communitydragon"
-                        title="Patreon"
+                        title={t("navbar.linksMenu.patreon.title")}
                       >
-                        Our Patreon in case you want to support us. Any help is
-                        appreciated ❤️
+                        {t("navbar.linksMenu.patreon.description")}
                       </ListItem>
                     </ul>
                   </NavigationMenuContent>
@@ -193,7 +192,7 @@ export const NavBar: React.FC = () => {
                   nativeButton={false}
                   render={
                     <a href="https://www.patreon.com/communitydragon">
-                      Support us <HandHeart />
+                      {t("navbar.supportUs")} <HandHeart />
                     </a>
                   }
                 />

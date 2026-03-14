@@ -1,0 +1,125 @@
+{
+  "common": {
+    "title": "Tema CDragon Nginx",
+    "description": "Explorar y administrar archivos del juego League of Legends"
+  },
+  "hero": {
+    "title": "Acumulando datos desde",
+    "subtitle": "Riot Games desde 2017"
+  },
+  "navbar": {
+    "home": "Inicio",
+    "projects": "Proyectos",
+    "links": "Enlaces",
+    "projectsMenu": {
+      "raw": {
+        "title": "RAW",
+        "description": "Todos los activos brutos extraídos del cliente LCU y del juego League of Legends"
+      },
+      "cdn": {
+        "title": "CDN",
+        "description": "Un CDN personalizado para servir datos estáticos simplificando el acceso a los activos de Riot"
+      },
+      "universe": {
+        "title": "Universe",
+        "description": "Una herramienta para encontrar, ver y descifrar archivos .bin de Riot"
+      },
+      "binViewer": {
+        "title": "Visor .BIN",
+        "description": "Una herramienta para encontrar, ver y descifrar archivos .bin de Riot"
+      },
+      "cdtb": {
+        "title": "CDTB",
+        "description": "Un conjunto de herramientas para trabajar con archivos de juegos y exportar archivos de Riot Games"
+      },
+      "hashes": {
+        "title": "Hashes",
+        "description": "Un repositorio que contiene todos los hashes de archivos conocidos de Riot Games"
+      }
+    },
+    "linksMenu": {
+      "awesomeList": {
+        "title": "Lista Impresionante",
+        "description": "Una lista de cosas que funcionan con las APIs de League of Legends"
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "Nuestra página de GitHub que contiene todos nuestros repositorios y herramientas"
+      },
+      "docs": {
+        "title": "Documentación",
+        "description": "Documentación que rodea los datos del juego de Riot y herramientas relacionadas"
+      },
+      "blog": {
+        "title": "Blog",
+        "description": "Nuestra página de blog con respecto a las actualizaciones de CommunityDragon"
+      },
+      "discord": {
+        "title": "Discord",
+        "description": "El grupo Discord de nuestra comunidad. Siéntete libre de unirte para debates y preguntas"
+      },
+      "patreon": {
+        "title": "Patreon",
+        "description": "Nuestro Patreon en caso de que quieras apoyarnos. Cualquier ayuda es apreciada ❤️"
+      }
+    },
+    "supportUs": "Apóyanos"
+  },
+  "search": {
+    "placeholder": "Buscar...",
+    "label": "Buscar",
+    "loading": "Cargando...",
+    "local": "Local",
+    "global": "Global"
+  },
+  "breadcrumbs": {
+    "toggleMenu": "Abrir menú",
+    "more": "Más"
+  },
+  "fileExplorer": {
+    "name": "Nombre",
+    "size": "Tamaño",
+    "modified": "Modificado",
+    "emptySize": "-",
+    "processing": "Procesando entradas de archivos",
+    "searching": "Buscando en entradas de archivos, por favor espera...",
+    "noResults": "No se encontraron resultados."
+  },
+  "binViewer": {
+    "title": "Visor .BIN",
+    "description": "Ver y analizar archivos .BIN de League of Legends."
+  },
+  "tabs": {
+    "fileExplorer": "Explorador de Archivos",
+    "binViewer": "Visor .BIN"
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Cambia la configuración como te guste.",
+    "visual": {
+      "title": "Visual",
+      "description": "Personaliza elementos visuales en el sitio web. ¡Haz que el sitio web sea tuyo! ❤️",
+      "showHero": "Mostrar sección de héroe",
+      "showBackground": "Mostrar imagen de fondo"
+    },
+    "language": {
+      "title": "Idioma",
+      "description": "Selecciona tu idioma preferido",
+      "en": "English",
+      "es": "Español",
+      "nl": "Nederlands",
+      "zh": "中文",
+      "de": "Deutsch",
+      "fr": "Français",
+      "ko": "한국어"
+    }
+  },
+  "accessibility": {
+    "loading": "Cargando",
+    "breadcrumb": "navegación de ruta",
+    "communityDragonLogo": "CommunityDragon"
+  },
+  "errors": {
+    "prefix": "Error:"
+  }
+}

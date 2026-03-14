@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import heroImage from "@/assets/hero.jpg";
 import logo from "@/assets/logo.png";
 import whiteLogo from "@/assets/logo-white.png";
 import { useSettings } from "@/hooks/settings";
 
 export const Hero: React.FC = () => {
+  const { t } = useTranslation();
   const { settings } = useSettings();
 
   const showHero = settings.visual.show_hero;
@@ -21,8 +23,8 @@ export const Hero: React.FC = () => {
           <div className="flex gap-4 w-min m-auto items-center align-middle">
             <div className="grow">
               <h1 className="scroll-m-20 text-right text-4xl font-extrabold tracking-tight text-nowrap">
-                Hoarding data from <br />
-                Riot Games since 2017
+                {t("hero.title")} <br />
+                {t("hero.subtitle")}
               </h1>
             </div>
             <div>
@@ -32,7 +34,7 @@ export const Hero: React.FC = () => {
                   media="(prefers-color-scheme: dark)"
                 />
                 <img
-                  alt="CommunityDragon"
+                  alt={t("accessibility.communityDragonLogo")}
                   src={logo}
                   height="128"
                   width="128"
