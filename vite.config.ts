@@ -33,4 +33,7 @@ export default defineConfig(({ command }) => ({
       ignored: ["**/.history/**"],
     },
   },
+  define: {
+    __RENDER_SSG__: JSON.stringify(command === "build"),
+  },
 }));

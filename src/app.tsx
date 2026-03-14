@@ -1,5 +1,5 @@
 import { AppWindowIcon, CodeIcon } from "lucide-react";
-import { I18nextProvider, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { FileExplorer } from "@/components/features/file-explorer";
 import { Hero } from "@/components/global/hero";
 import { Main } from "@/components/global/main";
@@ -11,7 +11,6 @@ import { IndexProvider } from "@/contexts/nginx-index";
 import { SearchProvider } from "@/contexts/search";
 import { SettingsProvider } from "@/contexts/settings";
 import { ThemeProvider } from "@/contexts/theme";
-import i18n from "@/i18n/config";
 import { parseTemplate } from "@/lib/client/nginx";
 import { Settings } from "./components/global/settings";
 
@@ -55,22 +54,20 @@ const App: React.FC = () => {
   const { path, files } = parseTemplate();
 
   return (
-    <I18nextProvider i18n={i18n}>
-      <LangProvider>
-        <IndexProvider path={path} files={files}>
-          <SettingsProvider>
-            <ThemeProvider storageKey={import.meta.env.VITE_THEME_STORAGE_KEY}>
-              <SearchProvider debounceMs={500} initialMode="local">
-                <Settings />
-                <NavBar />
-                <Hero />
-                <AppTabs path={path} />
-              </SearchProvider>
-            </ThemeProvider>
-          </SettingsProvider>
-        </IndexProvider>
-      </LangProvider>
-    </I18nextProvider>
+    <LangProvider>
+      <IndexProvider path={path} files={files}>
+        <SettingsProvider>
+          <ThemeProvider storageKey={import.meta.env.VITE_THEME_STORAGE_KEY}>
+            <SearchProvider debounceMs={500} initialMode="local">
+              <Settings />
+              <NavBar />
+              <Hero />
+              <AppTabs path={path} />
+            </SearchProvider>
+          </ThemeProvider>
+        </SettingsProvider>
+      </IndexProvider>
+    </LangProvider>
   );
 };
 

@@ -118,6 +118,10 @@ function generateIndex(entries: Entry[], currentPath: string): string {
 export async function generateTemplate(request: Request): Promise<string> {
   if (request.method !== "GET") return "";
 
+  if (__RENDER_SSG__) {
+    return generateIndex([], "/");
+  }
+
   const url = new URL(request.url);
   const pathname = url.pathname;
 

@@ -28,3 +28,4 @@ declare const __THEME_STORAGE_KEY__: string;
 declare const __LOCALE_OPTIONS__: string[];
 declare const __LOCALE_STORAGE_KEY__: string;
 declare const __SETTINGS_STORAGE_KEY__: string;
+declare const __RENDER_SSG__: string;

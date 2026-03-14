@@ -1,4 +1,4 @@
-import { HandHeart, Menu } from "lucide-react";
+import { HandHeart, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "@/assets/logo-small.png";
@@ -203,7 +203,7 @@ export const NavBar: React.FC = () => {
                   onClick={() => toggle(true)}
                   size="icon"
                 >
-                  <Menu />
+                  <Settings />
                 </Button>
               </NavigationMenuItem>
             </NavigationMenuList>

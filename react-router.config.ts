@@ -7,6 +7,7 @@ import { version } from "vite";
 export default {
   appDirectory: "src",
   ssr: false,
+  prerender: ["/"],
   buildEnd({ reactRouterConfig, viteConfig }) {
     const startTime = performance.now();
     const logger = viteConfig.logger;
@@ -39,15 +40,18 @@ export default {
       path.join(clientBuildDirectory, indexFile),
       "utf-8",
     );
-    let [headerContent, footerContent] = content.split(
+    let [headerContent, ...footerParts] = content.split(
       '<template id="nginx-index"',
-      2,
     );
+
     headerContent = `${headerContent}<template id="nginx-index"><h1>`;
     writeFileSync(path.join(clientBuildDirectory, headerFile), headerContent);
 
     logger.info(colors.dim(path.join(prettyDir, footerFile)));
-    footerContent = `</template>${footerContent.split("</template>", 2)[1]}`;
+    [, ...footerParts] = footerParts
+      .join('<template id="nginx-index"')
+      .split("</template>");
+    const footerContent = `</template>${footerParts.join("</template>")}`;
     writeFileSync(path.join(clientBuildDirectory, footerFile), footerContent);
 
     logger.info(

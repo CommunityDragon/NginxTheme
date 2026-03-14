@@ -10,7 +10,8 @@ const LangSwitcher: React.FC<Props> = ({ children }) => {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    const cb = (lng: string) => localStorage.setItem(import.meta.env.VITE_LOCALE_STORAGE_KEY, lng);
+    const cb = (lng: string) =>
+      localStorage.setItem(import.meta.env.VITE_LOCALE_STORAGE_KEY, lng);
     i18n.on("languageChanged", cb);
     return () => i18n.off("languageChanged", cb);
   }, [i18n]);

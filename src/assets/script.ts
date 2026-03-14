@@ -55,7 +55,10 @@
    * Reads and resolves the stored locale preference against supported locales.
    */
   const loadLocale = (): string =>
-    resolveLocale(localStorage.getItem(__LOCALE_STORAGE_KEY__), __LOCALE_OPTIONS__);
+    resolveLocale(
+      localStorage.getItem(__LOCALE_STORAGE_KEY__),
+      __LOCALE_OPTIONS__,
+    );
 
   /**
    * Applies the resolved locale to the document root,
