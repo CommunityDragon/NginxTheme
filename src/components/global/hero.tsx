@@ -1,4 +1,6 @@
 import { useTranslation } from "react-i18next";
+import gradient from "@/assets/gradient.png";
+import gradientDark from "@/assets/gradient-dark.png";
 import heroImage from "@/assets/hero.jpg";
 import logo from "@/assets/logo.png";
 import whiteLogo from "@/assets/logo-white.png";
@@ -12,13 +14,37 @@ export const Hero: React.FC = () => {
   const showBackground = showHero && settings.visual.show_background;
 
   return showHero ? (
-    <div
-      className="bg-cover bg-center"
-      style={{
-        backgroundImage: showBackground ? `url('${heroImage}')` : "none",
-      }}
-    >
-      <div className="pt-16 pb-24 bg-linear-to-b from-background/20 to-background">
+    <div className="relative">
+      {showBackground && (
+        <div
+          className="absolute left-0 right-0 top-0 max-h-[75vh] z-0 bg-cover bg-center"
+          style={{
+            backgroundImage: showBackground ? `url('${heroImage}')` : "none",
+          }}
+        >
+          <img
+            src={heroImage}
+            alt=""
+            aria-hidden="true"
+            className="relative w-full h-full object-cover max-h-[57vh]"
+          />
+          <div
+            className="h-full w-full absolute inset-0 bg-size-[auto_100%] bg-repeat-x dark:hidden"
+            style={{
+              backgroundImage: showBackground ? `url('${gradient}')` : "none",
+            }}
+          />
+          <div
+            className="h-full w-full absolute inset-0 bg-size-[auto_100%] bg-repeat-x light:hidden"
+            style={{
+              backgroundImage: showBackground
+                ? `url('${gradientDark}')`
+                : "none",
+            }}
+          />
+        </div>
+      )}
+      <div className="pt-16 relative z-10">
         <div className="relative py-8">
           <div className="flex gap-4 w-min m-auto items-center align-middle">
             <div className="grow">

@@ -44,11 +44,11 @@ export const NavBar: React.FC = () => {
         "top-0 z-50 w-full transition-colors duration-200",
         isScrolled || !settings.visual.show_hero
           ? "bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80"
-          : "bg-transparent",
+          : "bg-transparent dark text-foreground",
         settings.visual.show_hero ? "fixed" : "sticky",
       )}
     >
-      <div className="3xl:fixed:px-0 px-6 flex gap-4 items-center">
+      <div className="3xl:fixed:px-0 px-6 flex gap-4 items-center **:transition-colors **:duration-200">
         <a href="/" className="block">
           <picture className="h-full w-full">
             <source srcSet={whiteLogo} media="(prefers-color-scheme: dark)" />
@@ -70,6 +70,7 @@ export const NavBar: React.FC = () => {
                     className={cn(
                       navigationMenuTriggerStyle(),
                       "bg-transparent",
+                      "duration-0!",
                     )}
                     render={<a href="/">{t("navbar.home")}</a>}
                   />

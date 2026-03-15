@@ -14,12 +14,7 @@ export const Main: React.FC<Props> = ({ path, children }) => {
 
   return (
     <div className="relative">
-      <div
-        className={cn(
-          "flex flex-col gap-4 max-w-4xl m-auto pb-12",
-          settings.visual.show_hero ? "-mt-20" : "pt-8",
-        )}
-      >
+      <div className={cn("flex flex-col gap-4 max-w-4xl m-auto pb-12 pt-8")}>
         {settings.visual.show_hero ? (
           <>
             <Search />

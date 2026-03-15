@@ -34,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <Scripts />
       </head>
-      <body className="group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)] theme-default">
+      <body className="group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)]">
         {children}
         <template
           id="nginx-index"
