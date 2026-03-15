@@ -8,7 +8,7 @@ import { transformWithEsbuild } from "vite";
  * @returns {Promise<string>} Transformed JavaScript code.
  */
 export async function headerScript(variables = {}) {
-  const { default: raw } = await import("../../assets/script?raw");
+  const { default: raw } = await import("@/assets/script?raw");
   const { code } = await transformWithEsbuild(raw, "virtual.ts", {
     minify: true,
     target: "es2015",

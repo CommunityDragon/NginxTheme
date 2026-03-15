@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { FilelistDB } from "@/lib/client/db";
 import { escapeRegex } from "@/lib/client/utils";
 import type { SearchResult } from "@/types/search";
-import { useIndex } from "./nginx-index";
+import { useIndex } from "./nginx";
 import { useSearch } from "./search";
 
 const RAW_HOST = "https://raw.communitydragon.org";

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "@/assets/logo-small.png";
 import whiteLogo from "@/assets/logo-small-white.png";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,7 +16,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useSettings } from "@/hooks/settings";
 import { cn } from "@/lib/client/utils";
-import { Button } from "../ui/button";
 import { Search } from "./search";
 
 export const NavBar: React.FC = () => {

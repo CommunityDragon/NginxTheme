@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/table";
 import { useFileExplorer } from "@/hooks/file-explorer";
 import { useSearch } from "@/hooks/search";
+import { Wrapper } from "./wrapper";
 
 export const SearchResultTable: React.FC = () => {
   const { t } = useTranslation();
@@ -38,50 +39,58 @@ export const SearchResultTable: React.FC = () => {
 
   if (error) {
     return (
-      <div>
-        {t("errors.prefix")} {error.message}
-      </div>
+      <Wrapper>
+        <div>
+          {t("errors.prefix")} {error.message}
+        </div>
+      </Wrapper>
     );
   }
 
   if (loading) {
     return (
-      <Empty className="w-full">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <Spinner />
-          </EmptyMedia>
-          <EmptyTitle>{t("fileExplorer.processing")}</EmptyTitle>
-          <EmptyDescription>{t("fileExplorer.searching")}</EmptyDescription>
-        </EmptyHeader>
-      </Empty>
+      <Wrapper>
+        <Empty className="w-full">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Spinner />
+            </EmptyMedia>
+            <EmptyTitle>{t("fileExplorer.processing")}</EmptyTitle>
+            <EmptyDescription>{t("fileExplorer.searching")}</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </Wrapper>
     );
   }
 
   if (results.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
-        {t("fileExplorer.noResults")}
-      </div>
+      <Wrapper>
+        <div className="text-center py-8 text-muted-foreground">
+          {t("fileExplorer.noResults")}
+        </div>
+      </Wrapper>
     );
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>{t("fileExplorer.name")}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {results.slice(0, 10000).map((result) => (
-          <TableRow key={result.filename}>
-            <TableCell>
-              <a href={result.href}>{result.filename}</a>
-            </TableCell>
+    <Wrapper>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t("fileExplorer.name")}</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {results.slice(0, 10000).map((result) => (
+            <TableRow key={result.filename}>
+              <TableCell>
+                <a href={result.href}>{result.filename}</a>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Wrapper>
   );
 };

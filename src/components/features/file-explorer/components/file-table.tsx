@@ -11,9 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useIndex } from "@/hooks/nginx-index";
+import { useIndex } from "@/hooks/nginx";
 import { getFileIcon, sortFiles } from "@/lib/client/utils";
 import type { SortColumn, SortDirection } from "@/types/files";
+import { Wrapper } from "./wrapper";
 
 export const FileTable: React.FC = () => {
   const { t } = useTranslation();
@@ -59,74 +60,76 @@ export const FileTable: React.FC = () => {
   };
 
   return (
-    <div className="rounded-md overflow-hidden">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-full">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleSort("name")}
-              >
-                {t("fileExplorer.name")}
-                <SortIcon column="name" />
-              </Button>
-            </TableHead>
+    <Wrapper>
+      <div className="rounded-md overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-full">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSort("name")}
+                >
+                  {t("fileExplorer.name")}
+                  <SortIcon column="name" />
+                </Button>
+              </TableHead>
 
-            <TableHead className="text-right whitespace-nowrap w-min">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleSort("size")}
-              >
-                {t("fileExplorer.size")}
-                <SortIcon column="size" />
-              </Button>
-            </TableHead>
+              <TableHead className="text-right whitespace-nowrap w-min">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSort("size")}
+                >
+                  {t("fileExplorer.size")}
+                  <SortIcon column="size" />
+                </Button>
+              </TableHead>
 
-            <TableHead className="text-right whitespace-nowrap w-min">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleSort("date")}
-              >
-                {t("fileExplorer.modified")}
-                <SortIcon column="date" />
-              </Button>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sortedFiles.map((file) => {
-            const Icon = getFileIcon(file.name, file.isDirectory);
-            return (
-              <TableRow key={file.link}>
-                <TableCell className="font-medium">
-                  <a href={file.link} className="flex items-center gap-2">
-                    <Icon className="h-4 w-4" />
-                    {file.name.replace(/\/+$/, "")}
-                  </a>
-                </TableCell>
+              <TableHead className="text-right whitespace-nowrap w-min">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSort("date")}
+                >
+                  {t("fileExplorer.modified")}
+                  <SortIcon column="date" />
+                </Button>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sortedFiles.map((file) => {
+              const Icon = getFileIcon(file.name, file.isDirectory);
+              return (
+                <TableRow key={file.link}>
+                  <TableCell className="font-medium">
+                    <a href={file.link} className="flex items-center gap-2">
+                      <Icon className="h-4 w-4" />
+                      {file.name.replace(/\/+$/, "")}
+                    </a>
+                  </TableCell>
 
-                <TableCell className="text-right">
-                  {!file.isDirectory && file.size ? (
-                    <Badge variant="secondary" className="inline-flex">
-                      {file.size.raw}
-                    </Badge>
-                  ) : (
-                    "-"
-                  )}
-                </TableCell>
+                  <TableCell className="text-right">
+                    {!file.isDirectory && file.size ? (
+                      <Badge variant="secondary" className="inline-flex">
+                        {file.size.raw}
+                      </Badge>
+                    ) : (
+                      "-"
+                    )}
+                  </TableCell>
 
-                <TableCell className="text-right whitespace-nowrap font-mono pr-5 text-xs">
-                  {formatDate(file.date)}
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
+                  <TableCell className="text-right whitespace-nowrap font-mono pr-5 text-xs">
+                    {formatDate(file.date)}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </Wrapper>
   );
 };

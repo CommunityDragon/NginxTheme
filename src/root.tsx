@@ -89,6 +89,7 @@ export async function loader({ request }: LoaderFunctionArgs): Promise<{
       import("@/lib/server/nginx"),
       import("@/lib/server/lang"),
       import("@/lib/server/header"),
+      import("@/lib/server/widgets"),
     ]);
 
   const locales = await getLocales();

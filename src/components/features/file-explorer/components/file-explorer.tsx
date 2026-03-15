@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Widgets } from "@/components/features/widgets";
 import { useSearch } from "@/hooks/search";
 import { FileTable } from "./file-table";
 import { SearchResultTable } from "./search-result-table";
@@ -14,6 +15,7 @@ export const FileExplorer: React.FC = () => {
   return (
     <>
       <div className={active ? "hidden" : ""}>
+        <Widgets />
         <FileTable />
       </div>
       <div className={active ? "" : "hidden"}>
