@@ -25,7 +25,7 @@
         "description": "Riot의 .bin 파일을 찾고, 보고, 해독하기 위한 도구"
       },
       "binViewer": {
-        "title": ".BIN 뷰어",
+        "title": ".BIN Viewer",
         "description": "Riot의 .bin 파일을 찾고, 보고, 해독하기 위한 도구"
       },
       "cdtb": {
@@ -39,7 +39,7 @@
     },
     "linksMenu": {
       "awesomeList": {
-        "title": "멋진 목록",
+        "title": "Awesome List",
         "description": "League of Legends API와 함께 작동하는 것들의 목록"
       },
       "github": {
@@ -47,11 +47,11 @@
         "description": "모든 저장소와 도구를 포함하는 우리의 GitHub 페이지"
       },
       "docs": {
-        "title": "문서",
+        "title": "Docs",
         "description": "Riot의 게임 데이터 및 관련 도구에 대한 문서"
       },
       "blog": {
-        "title": "블로그",
+        "title": "Blog",
         "description": "CommunityDragon 업데이트에 관한 우리의 블로그 페이지"
       },
       "discord": {

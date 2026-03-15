@@ -25,7 +25,7 @@
         "description": "Un outil pour trouver, afficher et décrypter les fichiers .bin de Riot"
       },
       "binViewer": {
-        "title": "Visionneuse .BIN",
+        "title": ".BIN Viewer",
         "description": "Un outil pour trouver, afficher et décrypter les fichiers .bin de Riot"
       },
       "cdtb": {
@@ -39,7 +39,7 @@
     },
     "linksMenu": {
       "awesomeList": {
-        "title": "Liste Fantastique",
+        "title": "Awesome List",
         "description": "Une liste de choses qui fonctionnent avec les API de League of Legends"
       },
       "github": {
@@ -47,7 +47,7 @@
         "description": "Notre page GitHub contenant tous nos repos et outils"
       },
       "docs": {
-        "title": "Documentation",
+        "title": "Docs",
         "description": "Documentation sur les données de jeu de Riot et les outils connexes"
       },
       "blog": {

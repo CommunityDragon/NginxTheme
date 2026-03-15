@@ -8,7 +8,7 @@
     "subtitle": "Riot Games sinds 2017"
   },
   "navbar": {
-    "home": "Startpagina",
+    "home": "Home",
     "projects": "Projecten",
     "links": "Links",
     "projectsMenu": {
@@ -47,7 +47,7 @@
         "description": "Onze GitHub-pagina met al onze repo's en tools"
       },
       "docs": {
-        "title": "Documentatie",
+        "title": "Docs",
         "description": "Documentatie over Riot's gamegegevens en gerelateerde tools"
       },
       "blog": {

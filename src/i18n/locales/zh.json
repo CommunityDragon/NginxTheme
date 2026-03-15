@@ -25,7 +25,7 @@
         "description": "用于查找、查看和解密 Riot .bin 文件的工具"
       },
       "binViewer": {
-        "title": ".BIN 查看器",
+        "title": ".BIN Viewer",
         "description": "用于查找、查看和解密 Riot .bin 文件的工具"
       },
       "cdtb": {
@@ -39,7 +39,7 @@
     },
     "linksMenu": {
       "awesomeList": {
-        "title": "精选列表",
+        "title": "Awesome List",
         "description": "适用于英雄联盟 API 的工具列表"
       },
       "github": {
@@ -47,11 +47,11 @@
         "description": "我们的 GitHub 页面，包含所有存储库和工具"
       },
       "docs": {
-        "title": "文档",
+        "title": "Docs",
         "description": "关于 Riot 游戏数据和相关工具的文档"
       },
       "blog": {
-        "title": "博客",
+        "title": "Blog",
         "description": "我们关于 CommunityDragon 更新的博客页面"
       },
       "discord": {
