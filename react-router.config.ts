@@ -7,7 +7,6 @@ import { version } from "vite";
 export default {
   appDirectory: "src",
   ssr: false,
-  prerender: ["/"],
   buildEnd({ reactRouterConfig, viteConfig }) {
     const startTime = performance.now();
     const logger = viteConfig.logger;
